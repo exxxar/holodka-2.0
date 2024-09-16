@@ -1,0 +1,16 @@
+created:
+    - app/Http/Controllers/PersonController.php
+    - database/factories/PersonFactory.php
+    - database/migrations/2024_09_15_152033_create_people_table.php
+    - app/Models/Person.php
+    - tests/Feature/Http/Controllers/PersonControllerTest.php
+    - app/Http/Requests/PersonStoreRequest.php
+    - app/Http/Requests/PersonUpdateRequest.php
+    - resources/views/person/index.blade.php
+    - resources/views/person/create.blade.php
+    - resources/views/person/show.blade.php
+    - resources/views/person/edit.blade.php
+updated:
+    - routes/web.php
+models:
+    Person: { name: 'string:255 nullable', age: 'integer default:0', birthday: 'string:255 nullable', vk_group_link: 'string:255 nullable', vk_user_link: 'string:255 nullable', city: 'string:255 nullable', from: 'string:255 nullable', common_count: 'string:255 nullable', home_town: 'string:255 nullable', last_seen: 'string:255 nullable', is_profile_closed: 'boolean default:false', is_messages_closed: 'boolean default:false', deactivated: 'boolean default:false', owner_id: 'id foreign:materials' }

@@ -1,0 +1,22 @@
+models:
+  Person:
+    name: string:255 nullable
+    age: integer default:0
+    birthday: string:255 nullable
+    vk_group_link: string:255 nullable
+    vk_user_link: string:255 nullable
+    city: string:255 nullable
+    from: string:255 nullable
+    common_count: string:255 nullable
+    home_town: string:255 nullable
+    last_seen: string:255 nullable
+    is_profile_closed: boolean default:false
+    is_messages_closed: boolean default:false
+    deactivated: boolean default:false
+    owner_id: id foreign:materials
+
+seeds:   Person
+
+controllers:
+  Person:
+    resource
