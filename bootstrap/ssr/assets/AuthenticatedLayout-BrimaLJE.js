@@ -235,6 +235,21 @@ const _sfc_main = {
         }),
         _: 1
       }, _parent));
+      _push(ssrRenderComponent(_sfc_main$2, {
+        href: _ctx.route("statistics"),
+        active: _ctx.route().current("statistics")
+      }, {
+        default: withCtx((_, _push2, _parent2, _scopeId) => {
+          if (_push2) {
+            _push2(` Общая статистика `);
+          } else {
+            return [
+              createTextVNode(" Общая статистика ")
+            ];
+          }
+        }),
+        _: 1
+      }, _parent));
       _push(`</div></div><div class="hidden sm:flex sm:items-center sm:ms-6"><div class="ms-3 relative">`);
       _push(ssrRenderComponent(_sfc_main$4, {
         align: "right",

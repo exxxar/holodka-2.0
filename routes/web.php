@@ -70,12 +70,26 @@ Route::get('/persons', function () {
     return Inertia::render('Persons');
 })->middleware(['auth', 'verified'])->name('persons');
 
+Route::get('/statistic', function () {
+    return Inertia::render('Statistic');
+})->middleware(['auth', 'verified'])->name('statistics');
+
+
+
+Route::prefix("/statistics")
+    ->middleware(['auth', 'verified'])
+    ->controller(App\Http\Controllers\PersonController::class)
+    ->group(function () {
+        Route::post("/", "getStatistic");
+    });
+
 Route::prefix("/persons")
     ->middleware(['auth', 'verified'])
     ->controller(App\Http\Controllers\PersonController::class)
     ->group(function () {
         Route::get("/", "index")->name('persons');
         Route::get("/cities", "cities")->name('cities');
+
         Route::post("/", "getSelfClientList");
         Route::post("/check-person", "checkPerson");
         Route::post("/excel-download", "excelDownload");

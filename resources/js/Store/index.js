@@ -1,5 +1,6 @@
 import {createStore} from 'vuex'
 import Persons from "@/Store/Modules/persons.js";
+import Statistic from "@/Store/Modules/statistic.js";
 
 export default createStore({
     state: {
@@ -17,6 +18,7 @@ export default createStore({
         },
     },
     modules: {
-        Persons
+        Persons,
+        Statistic
     }
 })

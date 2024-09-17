@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\PersonCollection;
 use App\Http\Resources\PersonResource;
 use App\Models\Person;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -22,6 +23,32 @@ class PersonController extends Controller
     public function index(Request $request): \Inertia\Response
     {
         return Inertia::render('Persons');
+    }
+
+    public function getStatistic(Request $request){
+        $users = User::query()
+            ->get();
+
+        $tmp = [];
+        foreach ($users as $user){
+
+            $persons  = Person::query()
+                ->where("owner_id",$user->id)
+                ->get();
+
+            $tmp[] = (object)[
+                "name"=>$user->name,
+                "checked"=>Collection::make($persons)->whereNotNull("checked_at")->count(),
+                "new"=>Collection::make($persons)->where("status", 0)->count(),
+                "in_process"=>Collection::make($persons)->where("status", 1)->count(),
+                "not_ready"=>Collection::make($persons)->where("status", 3)->count(),
+                "decline"=>Collection::make($persons)->where("status", 2)->count(),
+                "success"=>Collection::make($persons)->where("status", 4)->count(),
+            ];
+
+        }
+
+        return response()->json($tmp);
     }
 
     public function excelDownload(Request $request)

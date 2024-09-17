@@ -1,6 +1,6 @@
 import { useSSRContext, unref, withCtx, createVNode } from "vue";
 import { ssrRenderAttr, ssrRenderComponent } from "vue/server-renderer";
-import { _ as _sfc_main$2 } from "./AuthenticatedLayout-D3cydjq3.js";
+import { _ as _sfc_main$2 } from "./AuthenticatedLayout-BrimaLJE.js";
 import { Head } from "@inertiajs/vue3";
 import { _ as _export_sfc } from "./_plugin-vue_export-helper-1tPrXgE0.js";
 import "./ApplicationLogo-Dsp8Rdoh.js";

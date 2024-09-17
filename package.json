@@ -21,6 +21,7 @@
     },
     "dependencies": {
         "@kyvg/vue3-notification": "^3.3.0",
+        "vue3-charts": "^1.1.33",
         "vuex": "^4.1.0"
     }
 }

@@ -13,10 +13,10 @@
     "/build/assets/DeleteUserForm-DFRCl3Sh.js"
   ],
   "resources/js/Components/Dropdown.vue": [
-    "/build/assets/AuthenticatedLayout-D3cydjq3.js"
+    "/build/assets/AuthenticatedLayout-BrimaLJE.js"
   ],
   "resources/js/Components/DropdownLink.vue": [
-    "/build/assets/AuthenticatedLayout-D3cydjq3.js"
+    "/build/assets/AuthenticatedLayout-BrimaLJE.js"
   ],
   "resources/js/Components/InputError.vue": [
     "/build/assets/TextInput-Bq3bXff-.js"
@@ -28,36 +28,36 @@
     "/build/assets/DeleteUserForm-DFRCl3Sh.js"
   ],
   "resources/js/Components/NavLink.vue": [
-    "/build/assets/AuthenticatedLayout-D3cydjq3.js"
+    "/build/assets/AuthenticatedLayout-BrimaLJE.js"
   ],
   "resources/js/Components/Pagination.vue": [
-    "/build/assets/Persons-CXf6Hgao.js",
-    "/build/assets/Persons-zH5JTia7.css"
+    "/build/assets/PersonForm-Y2Kz_lmQ.js",
+    "/build/assets/PersonForm-zH5JTia7.css"
   ],
   "resources/js/Components/Pagination.vue?vue&type=style&index=0&lang.scss": [
-    "/build/assets/Persons-CXf6Hgao.js",
-    "/build/assets/Persons-zH5JTia7.css"
+    "/build/assets/PersonForm-Y2Kz_lmQ.js",
+    "/build/assets/PersonForm-zH5JTia7.css"
   ],
   "resources/js/Components/Persons/PersonForm.vue": [
-    "/build/assets/Persons-CXf6Hgao.js",
-    "/build/assets/Persons-zH5JTia7.css"
+    "/build/assets/PersonForm-Y2Kz_lmQ.js",
+    "/build/assets/PersonForm-zH5JTia7.css"
   ],
   "resources/js/Components/Persons/PersonTable.vue": [
-    "/build/assets/Persons-CXf6Hgao.js",
-    "/build/assets/Persons-zH5JTia7.css"
+    "/build/assets/PersonForm-Y2Kz_lmQ.js",
+    "/build/assets/PersonForm-zH5JTia7.css"
   ],
   "resources/js/Components/Persons/PersonTable.vue?vue&type=style&index=0&lang.css": [
-    "/build/assets/Persons-CXf6Hgao.js",
-    "/build/assets/Persons-zH5JTia7.css"
+    "/build/assets/PersonForm-Y2Kz_lmQ.js",
+    "/build/assets/PersonForm-zH5JTia7.css"
   ],
   "resources/js/Components/Persons/RequestVKForm.vue": [
-    "/build/assets/Dashboard-CrTb_wGt.js"
+    "/build/assets/Dashboard-Cg52hdTp.js"
   ],
   "resources/js/Components/PrimaryButton.vue": [
     "/build/assets/PrimaryButton-CZbnR4E4.js"
   ],
   "resources/js/Components/ResponsiveNavLink.vue": [
-    "/build/assets/AuthenticatedLayout-D3cydjq3.js"
+    "/build/assets/AuthenticatedLayout-BrimaLJE.js"
   ],
   "resources/js/Components/SecondaryButton.vue": [
     "/build/assets/DeleteUserForm-DFRCl3Sh.js"
@@ -66,7 +66,7 @@
     "/build/assets/TextInput-Bq3bXff-.js"
   ],
   "resources/js/Layouts/AuthenticatedLayout.vue": [
-    "/build/assets/AuthenticatedLayout-D3cydjq3.js"
+    "/build/assets/AuthenticatedLayout-BrimaLJE.js"
   ],
   "resources/js/Layouts/GuestLayout.vue": [
     "/build/assets/GuestLayout-C19zP9uD.js"
@@ -90,14 +90,13 @@
     "/build/assets/VerifyEmail-C_of-xAz.js"
   ],
   "resources/js/Pages/Dashboard.vue": [
-    "/build/assets/Dashboard-CrTb_wGt.js"
+    "/build/assets/Dashboard-Cg52hdTp.js"
   ],
   "resources/js/Pages/Persons.vue": [
-    "/build/assets/Persons-CXf6Hgao.js",
-    "/build/assets/Persons-zH5JTia7.css"
+    "/build/assets/Persons-DIjBV-BG.js"
   ],
   "resources/js/Pages/Profile/Edit.vue": [
-    "/build/assets/Edit-D9ic4PZZ.js"
+    "/build/assets/Edit-DjDncDp2.js"
   ],
   "resources/js/Pages/Profile/Partials/DeleteUserForm.vue": [
     "/build/assets/DeleteUserForm-DFRCl3Sh.js"
@@ -107,6 +106,9 @@
   ],
   "resources/js/Pages/Profile/Partials/UpdateProfileInformationForm.vue": [
     "/build/assets/UpdateProfileInformationForm-BwLAAesb.js"
+  ],
+  "resources/js/Pages/Statistic.vue": [
+    "/build/assets/Statistic-Be5WrgK3.js"
   ],
   "resources/js/Pages/Welcome.vue": [
     "/build/assets/Welcome-UsGjw8Wd.js",

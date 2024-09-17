@@ -1,11 +1,8 @@
-import { useSSRContext, mergeProps, unref, withCtx, createVNode, openBlock, createBlock, createCommentVNode } from "vue";
 import { ssrRenderAttrs, ssrRenderClass, ssrRenderList, ssrInterpolate, ssrRenderAttr, ssrRenderStyle, ssrRenderComponent } from "vue/server-renderer";
-import { _ as _sfc_main$4 } from "./AuthenticatedLayout-D3cydjq3.js";
+import { useSSRContext, mergeProps } from "vue";
 import { _ as _export_sfc } from "./_plugin-vue_export-helper-1tPrXgE0.js";
 import { mapGetters } from "vuex";
-import { Head } from "@inertiajs/vue3";
-import "./ApplicationLogo-Dsp8Rdoh.js";
-const _sfc_main$3 = {
+const _sfc_main$2 = {
   props: ["pagination"],
   data() {
     return {
@@ -71,14 +68,14 @@ function _sfc_ssrRender(_ctx, _push, _parent, _attrs, $props, $setup, $data, $op
     _push(`<!---->`);
   }
 }
-const _sfc_setup$3 = _sfc_main$3.setup;
-_sfc_main$3.setup = (props, ctx) => {
+const _sfc_setup$2 = _sfc_main$2.setup;
+_sfc_main$2.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/Components/Pagination.vue");
-  return _sfc_setup$3 ? _sfc_setup$3(props, ctx) : void 0;
+  return _sfc_setup$2 ? _sfc_setup$2(props, ctx) : void 0;
 };
-const Pagination = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["ssrRender", _sfc_ssrRender]]);
-const __default__$1 = {
+const Pagination = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["ssrRender", _sfc_ssrRender]]);
+const __default__ = {
   data() {
     return {
       loaded: true,
@@ -380,7 +377,7 @@ const __default__$1 = {
     }
   }
 };
-const _sfc_main$2 = /* @__PURE__ */ Object.assign(__default__$1, {
+const _sfc_main$1 = /* @__PURE__ */ Object.assign(__default__, {
   __name: "PersonTable",
   __ssrInlineRender: true,
   setup(__props) {
@@ -795,13 +792,13 @@ const _sfc_main$2 = /* @__PURE__ */ Object.assign(__default__$1, {
     };
   }
 });
-const _sfc_setup$2 = _sfc_main$2.setup;
-_sfc_main$2.setup = (props, ctx) => {
+const _sfc_setup$1 = _sfc_main$1.setup;
+_sfc_main$1.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/Components/Persons/PersonTable.vue");
-  return _sfc_setup$2 ? _sfc_setup$2(props, ctx) : void 0;
+  return _sfc_setup$1 ? _sfc_setup$1(props, ctx) : void 0;
 };
-const _sfc_main$1 = {
+const _sfc_main = {
   components: {},
   props: ["item"],
   data() {
@@ -895,91 +892,12 @@ const _sfc_main$1 = {
     }
   }
 };
-const _sfc_setup$1 = _sfc_main$1.setup;
-_sfc_main$1.setup = (props, ctx) => {
-  const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/Components/Persons/PersonForm.vue");
-  return _sfc_setup$1 ? _sfc_setup$1(props, ctx) : void 0;
-};
-const __default__ = {
-  data() {
-    return {
-      loading: false,
-      selectedClient: null
-    };
-  },
-  methods: {
-    selectClient(item) {
-      this.selectedClient = item;
-      this.loading = true;
-      this.$nextTick(() => {
-        this.loading = false;
-      });
-    },
-    callbackClientForm() {
-      this.loading = true;
-      this.selectedClient = null;
-      this.$nextTick(() => {
-        this.loading = false;
-      });
-    }
-  }
-};
-const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
-  __name: "Persons",
-  __ssrInlineRender: true,
-  setup(__props) {
-    return (_ctx, _push, _parent, _attrs) => {
-      _push(`<!--[-->`);
-      _push(ssrRenderComponent(unref(Head), { title: "Клиенты" }, null, _parent));
-      _push(ssrRenderComponent(_sfc_main$4, null, {
-        header: withCtx((_, _push2, _parent2, _scopeId) => {
-          if (_push2) {
-            _push2(`<h2 class="font-semibold text-xl text-gray-800 leading-tight"${_scopeId}>Клиенты</h2>`);
-          } else {
-            return [
-              createVNode("h2", { class: "font-semibold text-xl text-gray-800 leading-tight" }, "Клиенты")
-            ];
-          }
-        }),
-        default: withCtx((_, _push2, _parent2, _scopeId) => {
-          if (_push2) {
-            _push2(`<div class="py-12"${_scopeId}><div class="max-w-7xl mx-auto sm:px-6 lg:px-8"${_scopeId}><div class="bg-white overflow-hidden shadow-sm sm:rounded-lg"${_scopeId}><div class="p-6 text-gray-900"${_scopeId}>`);
-            if (!_ctx.loading) {
-              _push2(ssrRenderComponent(_sfc_main$2, { onSelect: _ctx.selectClient }, null, _parent2, _scopeId));
-            } else {
-              _push2(`<!---->`);
-            }
-            _push2(`</div></div></div></div>`);
-          } else {
-            return [
-              createVNode("div", { class: "py-12" }, [
-                createVNode("div", { class: "max-w-7xl mx-auto sm:px-6 lg:px-8" }, [
-                  createVNode("div", { class: "bg-white overflow-hidden shadow-sm sm:rounded-lg" }, [
-                    createVNode("div", { class: "p-6 text-gray-900" }, [
-                      !_ctx.loading ? (openBlock(), createBlock(_sfc_main$2, {
-                        key: 0,
-                        onSelect: _ctx.selectClient
-                      }, null, 8, ["onSelect"])) : createCommentVNode("", true)
-                    ])
-                  ])
-                ])
-              ])
-            ];
-          }
-        }),
-        _: 1
-      }, _parent));
-      _push(`<!--]-->`);
-    };
-  }
-});
 const _sfc_setup = _sfc_main.setup;
 _sfc_main.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/Pages/Persons.vue");
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/Components/Persons/PersonForm.vue");
   return _sfc_setup ? _sfc_setup(props, ctx) : void 0;
 };
 export {
-  _sfc_main as default
+  _sfc_main$1 as _
 };
