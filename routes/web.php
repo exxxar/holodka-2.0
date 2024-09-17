@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Laravel\Socialite\Facades\Socialite;
 use Maatwebsite\Excel\Facades\Excel;
@@ -42,7 +43,7 @@ Route::any('/vk/auth',function (Request $request){
         $user = \App\Models\User::query()
             ->create([
                 'name'=>$vkUser->getName() ?? $vkUser->getNickname(),
-                'email'=>$vkUser->getEmail(),
+                'email'=>$vkUser->getEmail() ?? Str::uuid()."@ya-v-dele.ru",
                 'password'=>bcrypt($vkUser->getNickname()),
             ]);
     }
