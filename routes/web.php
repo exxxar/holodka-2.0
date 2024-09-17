@@ -4,8 +4,12 @@ use App\Classes\VKBusinessLogic;
 use App\Http\Controllers\ProfileController;
 use Carbon\Carbon;
 use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
+use Laravel\Socialite\Facades\Socialite;
 use Maatwebsite\Excel\Facades\Excel;
 
 /*
@@ -22,7 +26,34 @@ use Maatwebsite\Excel\Facades\Excel;
 
 
 
+Route::get('/vk',function (){
+    return Socialite::driver('vkontakte')->redirect();
+})->name("vk.login-url");
 
+
+Route::any('/vk/auth',function (Request $request){
+    $vkUser = Socialite::driver('vkontakte')->user();
+
+    $user = \App\Models\User::query()->where("email",$vkUser->getEmail())
+        ->first();
+
+    if (is_null($user))
+    {
+        $user = \App\Models\User::query()
+            ->create([
+                'name'=>$vkUser->getName() ?? $vkUser->getNickname(),
+                'email'=>$vkUser->getEmail(),
+                'password'=>bcrypt($vkUser->getNickname()),
+            ]);
+    }
+
+    Auth::login($user);
+
+    $request->session()->regenerate();
+
+
+    return redirect()->route('dashboard');
+});
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [

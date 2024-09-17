@@ -34,7 +34,7 @@ defineProps({
             >
 
             <template v-else>
-                <Link
+<!--                <Link
                     :href="route('login')"
                     class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
                     >Войти</Link
@@ -45,13 +45,17 @@ defineProps({
                     :href="route('register')"
                     class="ms-4 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
                     >Регистрация</Link
-                >
+                >-->
             </template>
         </div>
 
         <div class="max-w-7xl mx-auto p-6 lg:p-8">
-            <div class="flex justify-center">
+            <div class="flex justify-center flex-wrap flex-col">
                 <img src="/logo.png" alt="" style="width: 200px;">
+
+                <a
+                    :href="route('vk.login-url')"
+                    class="btn btn-success rounded-0 px-5 py-3 my-5">Войти в систему</a>
             </div>
 
 <!--            <div class="mt-16">

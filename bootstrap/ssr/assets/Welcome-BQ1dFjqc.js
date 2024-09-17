@@ -1,5 +1,5 @@
 import { unref, withCtx, createTextVNode, useSSRContext } from "vue";
-import { ssrRenderComponent, ssrRenderStyle } from "vue/server-renderer";
+import { ssrRenderComponent, ssrRenderStyle, ssrRenderAttr } from "vue/server-renderer";
 import { Head, Link } from "@inertiajs/vue3";
 const _sfc_main = {
   __name: "Welcome",
@@ -44,48 +44,13 @@ const _sfc_main = {
             _: 1
           }, _parent));
         } else {
-          _push(`<!--[-->`);
-          _push(ssrRenderComponent(unref(Link), {
-            href: _ctx.route("login"),
-            class: "font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
-          }, {
-            default: withCtx((_, _push2, _parent2, _scopeId) => {
-              if (_push2) {
-                _push2(`Войти`);
-              } else {
-                return [
-                  createTextVNode("Войти")
-                ];
-              }
-            }),
-            _: 1
-          }, _parent));
-          if (__props.canRegister) {
-            _push(ssrRenderComponent(unref(Link), {
-              href: _ctx.route("register"),
-              class: "ms-4 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
-            }, {
-              default: withCtx((_, _push2, _parent2, _scopeId) => {
-                if (_push2) {
-                  _push2(`Регистрация`);
-                } else {
-                  return [
-                    createTextVNode("Регистрация")
-                  ];
-                }
-              }),
-              _: 1
-            }, _parent));
-          } else {
-            _push(`<!---->`);
-          }
-          _push(`<!--]-->`);
+          _push(`<!--[--><!--]-->`);
         }
         _push(`</div>`);
       } else {
         _push(`<!---->`);
       }
-      _push(`<div class="max-w-7xl mx-auto p-6 lg:p-8"><div class="flex justify-center"><img src="/logo.png" alt="" style="${ssrRenderStyle({ "width": "200px" })}"></div></div></div><!--]-->`);
+      _push(`<div class="max-w-7xl mx-auto p-6 lg:p-8"><div class="flex justify-center flex-wrap flex-col"><img src="/logo.png" alt="" style="${ssrRenderStyle({ "width": "200px" })}"><a${ssrRenderAttr("href", _ctx.route("vk.login-url"))} class="btn btn-success rounded-0 px-5 py-3 my-5">Войти в систему</a></div></div></div><!--]-->`);
     };
   }
 };
