@@ -216,6 +216,7 @@ Route::prefix("/persons")
     ->group(function () {
         Route::get("/", "index")->name('persons');
         Route::get("/cities", "cities")->name('cities');
+        Route::get("/groups", "groups")->name('groups');
 
         Route::post("/", "getSelfClientList");
         Route::post("/check-person", "checkPerson");

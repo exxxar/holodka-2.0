@@ -147,6 +147,20 @@ class PersonController extends Controller
             ]);
     }
 
+    public function groups(Request $request)
+    {
+        $groups = Person::query()
+            ->where("owner_id", Auth::user()->id)
+            ->whereNotNull("vk_group_link")
+            ->distinct()
+            ->pluck("vk_group_link");
+
+        return response()
+            ->json([
+                "groups" => $groups
+            ]);
+    }
+
     /**
      * @throws \HttpException
      */
@@ -217,6 +231,20 @@ class PersonController extends Controller
             $needEmptyCity = count(array_filter($filters["cities"] ?? [], function ($item) {
                     return $item === "Без города";
                 })) > 0;
+
+            $needEmptyGroup = count(array_filter($filters["groups"] ?? [], function ($item) {
+                    return $item === "Не указана";
+                })) > 0;
+
+            if (count($filters["groups"] ?? []) > 0) {
+                $persons = $persons
+                    ->whereIn("vk_group_link", $filters["groups"] ?? []);
+
+                if ($needEmptyGroup)
+                    $persons = $persons
+                        ->orWhereNull("vk_group_link");
+
+            }
 
 
             if (count($filters["cities"] ?? []) > 0) {

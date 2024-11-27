@@ -38,12 +38,37 @@ import Pagination from "@/Components/Pagination.vue";
                   v-bind:class="{'bg-primary':sort.filters.cities.indexOf('Без города')!==-1, 'bg-secondary text-white':sort.filters.cities.indexOf('Без города')===-1}">
             Без города
         </span>,
-            <template v-for="(item,index) in cities">
+            <template v-for="(item,index) in selectedCities">
                <span class="badge m-0 cursor-pointer"
                      @click="changeCityFilter(item)"
                      v-bind:class="{'bg-primary':sort.filters.cities.indexOf(item)!==-1, 'bg-secondary text-white':sort.filters.cities.indexOf(item)===-1}"
                >{{ item }} </span>,
             </template>
+
+            <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#city-modal">
+                Выбрать города
+            </button>
+        </div>
+    </div>
+
+    <div class="alert alert-light my-2 rounded-0" v-if="loaded_groups">
+
+        <div class="d-flex w-100 flex-wrap align-items-center">
+            <h6 class="mr-2">Фильтры групп: </h6>
+            <span class="badge m-0 cursor-pointer"
+                  @click="changeGroupFilter('Не указана')"
+                  v-bind:class="{'bg-primary':sort.filters.groups.indexOf('Не указана')!==-1, 'bg-secondary text-white':sort.filters.groups.indexOf('Не указана')===-1}">
+            Не указана
+        </span>,
+            <template v-for="(item,index) in selectedGroups">
+               <span class="badge m-0 cursor-pointer"
+                     @click="changeGroupFilter(item)"
+                     v-bind:class="{'bg-primary':sort.filters.groups.indexOf(item)!==-1, 'bg-secondary text-white':sort.filters.groups.indexOf(item)===-1}"
+               >{{ item }} </span>,
+            </template>
+            <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#group-modal">
+                Выбрать группу
+            </button>
         </div>
     </div>
 
@@ -437,6 +462,52 @@ import Pagination from "@/Components/Pagination.vue";
         </div>
     </div>
 
+    <!-- Modal -->
+    <div class="modal fade" id="city-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Выбор города</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <template v-for="(item,index) in cities">
+                       <span class="badge m-0 cursor-pointer"
+                             @click="changeCityFilter(item)"
+                             v-bind:class="{'bg-primary':sort.filters.cities.indexOf(item)!==-1, 'bg-secondary text-white':sort.filters.cities.indexOf(item)===-1}"
+                       >{{ item }} </span>,
+                    </template>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="group-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Выбор группы</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <template v-for="(item,index) in groups">
+                       <span class="badge m-0 cursor-pointer"
+                             @click="changeGroupFilter(item)"
+                             v-bind:class="{'bg-primary':sort.filters.groups.indexOf(item)!==-1, 'bg-secondary text-white':sort.filters.groups.indexOf(item)===-1}"
+                       >{{ item }} </span>,
+                    </template>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </template>
 <script>
@@ -447,12 +518,14 @@ export default {
         return {
             loaded: true,
             loaded_cities: true,
+            loaded_groups: true,
             sort: {
                 column: null,
                 direction: "desc",
                 filters: {
                     statuses: [],
                     cities: [],
+                    groups: [],
                     age: {
                         from: null,
                         to: null,
@@ -463,6 +536,7 @@ export default {
             current_page: 0,
             paginate_object: null,
             cities: [],
+            groups: [],
             statuses: [
                 "Только добавлен",
                 "Взят в обработку",
@@ -613,10 +687,16 @@ export default {
     },
     computed: {
         ...mapGetters(['getPersons', 'getPersonsPaginateObject']),
-
+        selectedCities() {
+            return this.cities.filter(item => this.sort.filters.cities.indexOf(item) !== -1)
+        },
+        selectedGroups() {
+            return this.groups.filter(item => this.sort.filters.groups.indexOf(item) !== -1)
+        }
     },
     mounted() {
         this.loadAllCities();
+        this.loadAllGroups();
 
         this.loadPersons();
 
@@ -635,6 +715,18 @@ export default {
             ).then(resp => {
                 this.cities = resp.cities || []
                 this.loaded_cities = true
+            }).catch(() => {
+
+            })
+        },
+
+        loadAllGroups() {
+
+            this.loaded_groups = false
+            this.$store.dispatch("loadAllGroups"
+            ).then(resp => {
+                this.groups = resp.groups || []
+                this.loaded_groups = true
             }).catch(() => {
 
             })
@@ -718,6 +810,14 @@ export default {
         },
         selectItem(item) {
             this.$emit("select", item)
+        },
+        changeGroupFilter(group) {
+            let index = this.sort.filters.groups.findIndex(item => item === group)
+
+            if (index === -1)
+                this.sort.filters.groups.push(group)
+            else
+                this.sort.filters.groups.splice(index, 1)
         },
         changeCityFilter(city) {
             let index = this.sort.filters.cities.findIndex(item => item === city)

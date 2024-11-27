@@ -7,12 +7,14 @@ const __default__ = {
     return {
       loaded: true,
       loaded_cities: true,
+      loaded_groups: true,
       sort: {
         column: null,
         direction: "desc",
         filters: {
           statuses: [],
           cities: [],
+          groups: [],
           age: {
             from: null,
             to: null
@@ -23,6 +25,7 @@ const __default__ = {
       current_page: 0,
       paginate_object: null,
       cities: [],
+      groups: [],
       statuses: [
         "Только добавлен",
         "Взят в обработку",
@@ -166,10 +169,17 @@ const __default__ = {
     };
   },
   computed: {
-    ...mapGetters(["getPersons", "getPersonsPaginateObject"])
+    ...mapGetters(["getPersons", "getPersonsPaginateObject"]),
+    selectedCities() {
+      return this.cities.filter((item) => this.sort.filters.cities.indexOf(item) !== -1);
+    },
+    selectedGroups() {
+      return this.groups.filter((item) => this.sort.filters.groups.indexOf(item) !== -1);
+    }
   },
   mounted() {
     this.loadAllCities();
+    this.loadAllGroups();
     this.loadPersons();
     if (localStorage.getItem("ya_v_dele_visible_fields")) {
       let vf = JSON.parse(localStorage.getItem("ya_v_dele_visible_fields")) || [];
@@ -185,6 +195,16 @@ const __default__ = {
       ).then((resp) => {
         this.cities = resp.cities || [];
         this.loaded_cities = true;
+      }).catch(() => {
+      });
+    },
+    loadAllGroups() {
+      this.loaded_groups = false;
+      this.$store.dispatch(
+        "loadAllGroups"
+      ).then((resp) => {
+        this.groups = resp.groups || [];
+        this.loaded_groups = true;
       }).catch(() => {
       });
     },
@@ -261,6 +281,13 @@ const __default__ = {
     selectItem(item) {
       this.$emit("select", item);
     },
+    changeGroupFilter(group) {
+      let index = this.sort.filters.groups.findIndex((item) => item === group);
+      if (index === -1)
+        this.sort.filters.groups.push(group);
+      else
+        this.sort.filters.groups.splice(index, 1);
+    },
     changeCityFilter(city) {
       let index = this.sort.filters.cities.findIndex((item) => item === city);
       if (index === -1)
@@ -320,10 +347,19 @@ const _sfc_main$1 = /* @__PURE__ */ Object.assign(__default__, {
       _push(`<!--]--></div></div>`);
       if (_ctx.loaded_cities) {
         _push(`<div class="alert alert-light my-2 rounded-0"><div class="d-flex w-100 flex-wrap align-items-center"><h6 class="mr-2">Фильтры городов: </h6><span class="${ssrRenderClass([{ "bg-primary": _ctx.sort.filters.cities.indexOf("Без города") !== -1, "bg-secondary text-white": _ctx.sort.filters.cities.indexOf("Без города") === -1 }, "badge m-0 cursor-pointer"])}"> Без города </span>, <!--[-->`);
-        ssrRenderList(_ctx.cities, (item, index) => {
+        ssrRenderList(_ctx.selectedCities, (item, index) => {
           _push(`<!--[--><span class="${ssrRenderClass([{ "bg-primary": _ctx.sort.filters.cities.indexOf(item) !== -1, "bg-secondary text-white": _ctx.sort.filters.cities.indexOf(item) === -1 }, "badge m-0 cursor-pointer"])}">${ssrInterpolate(item)}</span>, <!--]-->`);
         });
-        _push(`<!--]--></div></div>`);
+        _push(`<!--]--><button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#city-modal"> Выбрать города </button></div></div>`);
+      } else {
+        _push(`<!---->`);
+      }
+      if (_ctx.loaded_groups) {
+        _push(`<div class="alert alert-light my-2 rounded-0"><div class="d-flex w-100 flex-wrap align-items-center"><h6 class="mr-2">Фильтры групп: </h6><span class="${ssrRenderClass([{ "bg-primary": _ctx.sort.filters.groups.indexOf("Не указана") !== -1, "bg-secondary text-white": _ctx.sort.filters.groups.indexOf("Не указана") === -1 }, "badge m-0 cursor-pointer"])}"> Не указана </span>, <!--[-->`);
+        ssrRenderList(_ctx.selectedGroups, (item, index) => {
+          _push(`<!--[--><span class="${ssrRenderClass([{ "bg-primary": _ctx.sort.filters.groups.indexOf(item) !== -1, "bg-secondary text-white": _ctx.sort.filters.groups.indexOf(item) === -1 }, "badge m-0 cursor-pointer"])}">${ssrInterpolate(item)}</span>, <!--]-->`);
+        });
+        _push(`<!--]--><button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#group-modal"> Выбрать группу </button></div></div>`);
       } else {
         _push(`<!---->`);
       }
@@ -715,7 +751,15 @@ const _sfc_main$1 = /* @__PURE__ */ Object.assign(__default__, {
       } else {
         _push(`<!---->`);
       }
-      _push(`<!--]-->`);
+      _push(`<div class="modal fade" id="city-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><h1 class="modal-title fs-5" id="exampleModalLabel">Выбор города</h1><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body"><!--[-->`);
+      ssrRenderList(_ctx.cities, (item, index) => {
+        _push(`<!--[--><span class="${ssrRenderClass([{ "bg-primary": _ctx.sort.filters.cities.indexOf(item) !== -1, "bg-secondary text-white": _ctx.sort.filters.cities.indexOf(item) === -1 }, "badge m-0 cursor-pointer"])}">${ssrInterpolate(item)}</span>, <!--]-->`);
+      });
+      _push(`<!--]--></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button></div></div></div></div><div class="modal fade" id="group-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><h1 class="modal-title fs-5" id="exampleModalLabel">Выбор группы</h1><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body"><!--[-->`);
+      ssrRenderList(_ctx.groups, (item, index) => {
+        _push(`<!--[--><span class="${ssrRenderClass([{ "bg-primary": _ctx.sort.filters.groups.indexOf(item) !== -1, "bg-secondary text-white": _ctx.sort.filters.groups.indexOf(item) === -1 }, "badge m-0 cursor-pointer"])}">${ssrInterpolate(item)}</span>, <!--]-->`);
+      });
+      _push(`<!--]--></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button></div></div></div></div><!--]-->`);
     };
   }
 });

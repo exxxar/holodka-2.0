@@ -38,6 +38,21 @@ const actions = {
             return Promise.reject(err);
         })
     },
+
+    async loadAllGroups(context) {
+        let link = `${BASE_PERSONS_LINK}/groups`
+        let method = 'GET'
+
+        let _axios = util.makeAxiosFactory(link, method)
+
+        return _axios.then((response) => {
+            let dataObject = response
+            return Promise.resolve(dataObject.data);
+        }).catch(err => {
+            context.commit("setErrors", err.response.data.errors || [])
+            return Promise.reject(err);
+        })
+    },
     async loadAllCities(context) {
         let link = `${BASE_PERSONS_LINK}/cities`
         let method = 'GET'
