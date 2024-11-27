@@ -288,11 +288,13 @@ class VKBusinessLogic
             if (is_null($person)) {
                 \App\Models\Person::query()
                     ->create($tmp);
-            } else
-                \App\Models\Person::query()
-                    ->update($tmp);
 
-            $users[] = (object)$tmp;
+                $users[] = (object)$tmp;
+            } /*else
+                \App\Models\Person::query()
+                    ->update($tmp);*/
+
+           // $users[] = (object)$tmp;
         }
 
         return $users;
