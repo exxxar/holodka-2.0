@@ -65,7 +65,7 @@ class User extends Authenticatable
     }
 
     public static function getSelf(){
-        $user = User::query()->find(Auth::user()->id);
+        $user = User::query()->find(Auth::user()->id ?? null);
         return $user;
     }
 }
