@@ -266,7 +266,7 @@ class VKBusinessLogic
             $tmp = [
                 "name" => "$item->first_name $item->last_name",
                 "vk_user_link" => "https://vk.com/id$item->id",
-                "vk_id" => "$item->id",
+                "vk_id" => $item->id,
                 "city" => isset($item->city) ? $item->city["title"] : null,
                 "birthday" => $item->bdate ?? null,
                 "age" => $age,
@@ -289,6 +289,7 @@ class VKBusinessLogic
                 \App\Models\Person::query()
                     ->create($tmp);
 
+                Log::info($item->id." ".$tmp["name"]);
                 $users[] = (object)$tmp;
             } /*else
                 \App\Models\Person::query()
