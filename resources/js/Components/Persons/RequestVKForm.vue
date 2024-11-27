@@ -11,7 +11,8 @@
 
         <div class="alert alert-info rounded-0">
             Количество постов, которые можно охватить. Чем больше глубина тем дольше время ожидания обработки.
-            Рекомендуемое значение от 30 до 100 в зависимости от числа подписчиков в группе. Чем больше подписчиков тем ниже должна быть глубина обработки.
+            Рекомендуемое значение от 30 до 100 в зависимости от числа подписчиков в группе. Чем больше подписчиков тем
+            ниже должна быть глубина обработки.
         </div>
         <div class="form-floating mb-3">
             <input type="number"
@@ -22,8 +23,14 @@
             <label for="floatingInput">Глубина обработки страницы</label>
         </div>
 
+        <div class="alert alert-light my-2" v-if="!user.is_active_token">
+            Ваш тоукен недействительный! Обновите его!
+        </div>
         <div class="d-flex w-100 justify-center">
-            <button class="btn btn-primary rounded-0">Получить ссылку авторизации</button>
+            <button
+                :disabled="!user.is_active_token"
+                class="btn btn-primary rounded-0">Добавить задачу
+            </button>
         </div>
 
     </form>
@@ -41,21 +48,24 @@
 export default {
     data() {
         return {
-            link: null,
             form: {
                 group: null,
                 max_post_count: 30,
             }
         }
     },
-    watch:{
+    computed: {
+        user() {
+            return window.user
+        }
+    },
+    watch: {
         'form.group': {
-            handler: function(newValue) {
-               if (this.form.group.indexOf("http")!==-1)
-               {
-                   let lastIndex = this.form.group.lastIndexOf("/")+1
-                   this.form.group = this.form.group.substring(lastIndex);
-               }
+            handler: function (newValue) {
+                if (this.form.group.indexOf("http") !== -1) {
+                    let lastIndex = this.form.group.lastIndexOf("/") + 1
+                    this.form.group = this.form.group.substring(lastIndex);
+                }
 
             },
             deep: true
@@ -63,9 +73,10 @@ export default {
     },
     methods: {
         submit() {
-            this.$store.dispatch("requestVKLink", this.form)
-                .then(resp=>{
-                    this.link = resp
+            this.$store.dispatch("addWork", this.form)
+                .then(resp => {
+                    const customEvent = new CustomEvent('jobs-reload-event');
+                    document.dispatchEvent(customEvent)
                 })
         }
     }

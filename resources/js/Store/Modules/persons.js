@@ -97,21 +97,7 @@ const actions = {
             return Promise.reject(err);
         })
     },
-    async requestVKLink(context, payload = {form: null}) {
-        let link = `${BASE_PERSONS_LINK}/get-vk-link`
 
-        let _axios = util.makeAxiosFactory(link, "POST", payload)
-
-        return _axios.then((response) => {
-
-            return Promise.resolve(response.data);
-        }).catch(err => {
-
-            if (err.response)
-                context.commit("setErrors", err.response.data.errors || [])
-            return Promise.reject(err);
-        })
-    },
     async requestByInn(context, payload = {inn: null}) {
         let link = `${BASE_PERSONS_LINK}/request-by-inn`
 

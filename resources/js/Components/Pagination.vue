@@ -62,6 +62,9 @@ export default {
             if (!this.pagination)
                 return [];
 
+            if (!this.pagination.meta)
+                return []
+
             let index = parseInt(this.pagination.meta.current_page)
 
             return this.pagination.meta.links

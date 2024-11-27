@@ -2,8 +2,11 @@
 
 namespace App\Classes;
 
+use App\Models\User;
 use Carbon\Carbon;
-use HttpException;
+
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use VK\Client\Enums\VKLanguage;
 use VK\Client\VKApiClient;
@@ -24,12 +27,23 @@ class VKBusinessLogic
 {
     protected $code;
     protected $accessToken;
+    protected $ownerId;
 
     public function __construct($code = null)
     {
         $this->code = $code;
         if (!is_null($code))
             $this->getAccessToken();
+    }
+
+    public function setOwner($id): void
+    {
+        $this->ownerId = $id;
+    }
+
+    public function setAccessToken($token): void
+    {
+        $this->accessToken = $token;
     }
 
     public function setCode($code): void
@@ -73,8 +87,17 @@ class VKBusinessLogic
             throw new HttpException("Код не указан", 400);
         }
 
+
         $response = $oauth->getAccessToken($client_id, $client_secret, $redirect_uri, $this->code);
         $this->accessToken = $response['access_token'];
+
+        $user = User::query()->find(Auth::user()->id);
+
+        $user->vk_access_token = $response["access_token"] ?? null;
+        if (!is_null($response["expires_in"] ?? null))
+            $user->vk_token_expired_at = Carbon::now()->addSeconds($response["expires_in"] ?? 0);
+        $user->save();
+
         return $this->accessToken;
     }
 
@@ -117,6 +140,26 @@ class VKBusinessLogic
                 "domain" => $domain,
                 "offset" => $offset,
                 "count" => $count,
+            ]);
+
+    }
+
+    /**
+     * @throws VKOAuthException
+     * @throws VKApiBlockedException
+     * @throws VKApiException
+     * @throws HttpException
+     * @throws VKClientException
+     */
+    public function post($message, $version = '5.130'): mixed
+    {
+
+        $vk = new VKApiClient($version, VKLanguage::RUSSIAN);
+
+        return $vk->wall()
+            ->post($this->accessToken, [
+                "message" => $message,
+                "mute_notifications" => 1,
             ]);
 
     }
@@ -235,6 +278,7 @@ class VKBusinessLogic
                 "is_profile_closed" => !($item->is_closed ?? true),
                 "is_messages_closed" => !($item->can_write_private_message ?? true),
                 "deactivated" => $item->deactivated ?? null,
+                "owner_id" =>  $this->ownerId,
             ];
 
             $person = \App\Models\Person::query()
@@ -242,7 +286,6 @@ class VKBusinessLogic
                 ->first();
 
             if (is_null($person)) {
-                $tmp['owner_id'] = \Illuminate\Support\Facades\Auth::user()->id ?? null;
                 \App\Models\Person::query()
                     ->create($tmp);
             } else
@@ -255,13 +298,13 @@ class VKBusinessLogic
         return $users;
     }
 
-    public function handler($state)
+    public function handler($group, $maxPostCount = 10)
     {
-        $state = json_decode(base64_decode($state));
+    /*    $state = json_decode(base64_decode($state));
         $group = $state->group ?? "profcom_dongu";
 
 
-        $maxPostCount = $state->max_post_count ?? 100;
+        $maxPostCount = $state->max_post_count ?? 100;*/
 
         $groupId = $this->getIdByName($group)["object_id"] ?? null;
 
@@ -273,10 +316,11 @@ class VKBusinessLogic
         //id
         //dd($result);
 
+
         $count = $result["count"];
         $postIds = $this->preparePostIds($result["items"]);
 
-        ini_set('max_execution_time', '3000');
+
 
         /*  for ($offset = 100; $offset < min($count, $maxPostCount); $offset += 100) {
               $time = random_int(1, 3);
@@ -325,8 +369,7 @@ class VKBusinessLogic
         } else
             $users = $this->getUsers(implode(",", $userIds));
 
-
-        return $this->prepareUsers($users, $group);
+        return count($this->prepareUsers($users, $group));
 
     }
 }

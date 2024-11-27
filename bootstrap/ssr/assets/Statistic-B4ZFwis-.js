@@ -1,11 +1,12 @@
 import { resolveComponent, unref, withCtx, createVNode, openBlock, createBlock, createCommentVNode, useSSRContext } from "vue";
 import { ssrRenderComponent } from "vue/server-renderer";
 import { _ as _sfc_main$1 } from "./AuthenticatedLayout-BrimaLJE.js";
-import "./PersonForm-Y2Kz_lmQ.js";
+import "./PersonForm-CkkTelMu.js";
 import { Head } from "@inertiajs/vue3";
 import { Chart, Grid, Bar, Tooltip, Line } from "vue3-charts";
 import "./ApplicationLogo-Dsp8Rdoh.js";
 import "./_plugin-vue_export-helper-1tPrXgE0.js";
+import "./Pagination-2FDkcWjj.js";
 import "vuex";
 const __default__ = {
   components: { Chart, Grid, Line, Bar, Tooltip },
