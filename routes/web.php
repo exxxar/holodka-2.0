@@ -1,6 +1,7 @@
 <?php
 
 use App\Classes\VKBusinessLogic;
+use App\Events\MyEvent;
 use App\Http\Controllers\ProfileController;
 use App\Jobs\ParseVKJob;
 use App\Models\User;
@@ -28,6 +29,10 @@ use VK\OAuth\VKOAuth;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::get('/pusher', function(){
+    event(new MyEvent('hello world', 2, "test", 2));
+});
 
 Route::get('/redis', function () {
 

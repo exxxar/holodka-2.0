@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Classes\VKBusinessLogic;
+use App\Events\MyEvent;
 use App\Models\UserJob;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
@@ -59,6 +60,7 @@ class ParseVKJob implements ShouldQueue
         $job->completed_at = Carbon::now();
         $job->save();
 
+        event(new MyEvent('hello world', $this->userId, $this->group));
         Log::info("end job");
     }
 }

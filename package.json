@@ -21,6 +21,8 @@
     },
     "dependencies": {
         "@kyvg/vue3-notification": "^3.3.0",
+        "laravel-echo": "^1.17.1",
+        "pusher-js": "^8.4.0-rc2",
         "vue3-charts": "^1.1.33",
         "vuex": "^4.1.0"
     }

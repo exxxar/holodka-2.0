@@ -19,9 +19,21 @@ if (user)
  * allows your team to easily build robust real-time web applications.
  */
 
-// import Echo from 'laravel-echo';
+ import Echo from 'laravel-echo';
 
-// import Pusher from 'pusher-js';
+ import Pusher from 'pusher-js';
+
+Pusher.logToConsole = true;
+
+let pusher = new Pusher('deff8312ec879e1a09d0', {
+    cluster: 'eu',
+    forceTLS: true
+});
+
+window.pusher = pusher;
+
+window.logo = import.meta.env.VITE_APP_LOGO
+
 // window.Pusher = Pusher;
 
 // window.Echo = new Echo({

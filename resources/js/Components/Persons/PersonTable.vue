@@ -692,6 +692,9 @@ export default {
         },
         selectedGroups() {
             return this.groups.filter(item => this.sort.filters.groups.indexOf(item) !== -1)
+        },
+        user(){
+            return window.user
         }
     },
     mounted() {
@@ -699,6 +702,19 @@ export default {
         this.loadAllGroups();
 
         this.loadPersons();
+
+        let channel = pusher.subscribe('my-channel');
+        channel.bind('my-event', (data) => {
+            if (data.userId === this.user.id)
+            {
+                this.$notify({
+                    title: 'Внимание!',
+                    text: 'Ваше задание #'+data.jobId+" успешно выполнено!",
+                    type: 'success'
+                })
+            }
+
+        });
 
         if (localStorage.getItem("ya_v_dele_visible_fields")) {
             let vf = JSON.parse(localStorage.getItem("ya_v_dele_visible_fields")) || [];
