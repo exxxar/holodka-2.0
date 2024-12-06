@@ -22,6 +22,7 @@ const __default__ = {
         }
       },
       search: null,
+      city_search: null,
       current_page: 0,
       paginate_object: null,
       cities: [],
@@ -175,6 +176,11 @@ const __default__ = {
     },
     selectedGroups() {
       return this.groups.filter((item) => this.sort.filters.groups.indexOf(item) !== -1);
+    },
+    filteredCities() {
+      if (!this.city_search)
+        return this.cities;
+      return this.cities.filter((item) => item.toLowerCase().indexOf(this.city_search.toLowerCase()) !== -1);
     },
     user() {
       return window.user;
@@ -646,7 +652,7 @@ const _sfc_main$1 = /* @__PURE__ */ Object.assign(__default__, {
           ssrRenderList(_ctx.items, (item, index) => {
             _push(`<tr>`);
             if (_ctx.isFieldActive("id")) {
-              _push(`<th class="${ssrRenderClass({ "bg-warning": item.checked_at != null })}" scope="row">${ssrInterpolate(item.id || index)}</th>`);
+              _push(`<th class="${ssrRenderClass({ "bg-warning": item.checked_at != null })}" scope="row">${ssrInterpolate(index + 1 + (_ctx.paginate_object ? _ctx.paginate_object.meta.current_page - 1 : 0) * 30)}</th>`);
             } else {
               _push(`<!---->`);
             }
@@ -764,8 +770,8 @@ const _sfc_main$1 = /* @__PURE__ */ Object.assign(__default__, {
       } else {
         _push(`<!---->`);
       }
-      _push(`<div class="modal fade" id="city-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><h1 class="modal-title fs-5" id="exampleModalLabel">Выбор города</h1><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body"><!--[-->`);
-      ssrRenderList(_ctx.cities, (item, index) => {
+      _push(`<div class="modal fade" id="city-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><h1 class="modal-title fs-5" id="exampleModalLabel">Выбор города</h1><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body"><div class="form-floating"><input type="search" class="form-control"${ssrRenderAttr("value", _ctx.city_search)}><label for="">Фильтрация города</label></div><hr class="my-3"><!--[-->`);
+      ssrRenderList(_ctx.filteredCities, (item, index) => {
         _push(`<!--[--><span class="${ssrRenderClass([{ "bg-primary": _ctx.sort.filters.cities.indexOf(item) !== -1, "bg-secondary text-white": _ctx.sort.filters.cities.indexOf(item) === -1 }, "badge m-0 cursor-pointer"])}">${ssrInterpolate(item)}</span>, <!--]-->`);
       });
       _push(`<!--]--></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button></div></div></div></div><div class="modal fade" id="group-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><h1 class="modal-title fs-5" id="exampleModalLabel">Выбор группы</h1><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body"><!--[-->`);

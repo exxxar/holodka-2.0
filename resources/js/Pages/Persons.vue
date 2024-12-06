@@ -44,10 +44,10 @@ export default {
     methods: {
         selectClient(item) {
             this.selectedClient = item;
-            this.loading = true
+         /*   this.loading = true
             this.$nextTick(() => {
                 this.loading = false
-            })
+            })*/
         },
         callbackClientForm() {
             this.loading = true

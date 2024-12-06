@@ -115,10 +115,12 @@ export default {
         }
     },
     mounted() {
+
         this.loadStatistic()
     },
     methods: {
         loadStatistic() {
+
             this.loaded = false
             this.$store.dispatch("loadStatistic").then(resp => {
                 this.chart = resp

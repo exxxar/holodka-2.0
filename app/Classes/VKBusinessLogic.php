@@ -28,6 +28,7 @@ class VKBusinessLogic
     protected $code;
     protected $accessToken;
     protected $ownerId;
+    protected $company;
 
     public function __construct($code = null)
     {
@@ -39,6 +40,10 @@ class VKBusinessLogic
     public function setOwner($id): void
     {
         $this->ownerId = $id;
+
+        $user =  User::query()->find($id);
+
+        $this->company = $user->company ?? 'test';
     }
 
     public function setAccessToken($token): void
@@ -271,7 +276,7 @@ class VKBusinessLogic
                 "birthday" => $item->bdate ?? null,
                 "age" => $age,
                 "vk_group_link" => "https://vk.com/$group",
-                "from" => "парсер",
+                "from" => $this->company,
                 "common_count" => $item->common_count ?? 0,
                 "home_town" => $item->home_town ?? '-',
                 "last_seen" => $item->last_seen["time"] ?? null,
@@ -283,6 +288,7 @@ class VKBusinessLogic
 
             $person = \App\Models\Person::query()
                 ->where("vk_id", $item->id)
+                ->where("from",  $this->company)
                 ->first();
 
             if (is_null($person)) {
@@ -310,11 +316,11 @@ class VKBusinessLogic
         $maxPostCount = $state->max_post_count ?? 100;*/
 
         $groupId = $this->getIdByName($group)["object_id"] ?? null;
-
+        sleep(1);
         //dd($groupId);
 
         $result = $this->getWall($group, 0, $maxPostCount);
-
+        sleep(1);
 
         //id
         //dd($result);
@@ -322,7 +328,6 @@ class VKBusinessLogic
 
         $count = $result["count"];
         $postIds = $this->preparePostIds($result["items"]);
-
 
 
         /*  for ($offset = 100; $offset < min($count, $maxPostCount); $offset += 100) {
@@ -337,9 +342,10 @@ class VKBusinessLogic
         $userIds = [];
         $maxLikes = 100;
         foreach ($postIds as $postId) {
-            $time = random_int(1, 3);
-            sleep($time);
+         /*   $time = random_int(1, 3);
+            sleep($time);*/
 
+            sleep(1);
             $result = $this->getLikes("-" . $groupId, $postId, "post", 0, $maxLikes);
 
             $diff = array_diff(array_values($result["items"]), $userIds);
@@ -347,17 +353,16 @@ class VKBusinessLogic
             $userIds = [...$userIds, ...$diff];
 
             $likesCount = $result["count"];
-            /*
+
                     if ($likesCount > 100)
                         for ($offset = 100; $offset < min($count, $maxLikes); $offset += 100) {
-                            $time = random_int(1, 3);
-                            sleep($time);
+                            sleep(1);
 
-                            $result  = $vk->getLikes("-" . $groupId, $postId, "post", $offset, $maxLikes);
+                            $result  = $this->getLikes("-" . $groupId, $postId, "post", $offset, $maxLikes);
 
                             $diff = array_diff($userIds, array_values($result["items"]));
                             $userIds = [...$userIds, ...$diff];
-                        }*/
+                        }
         }
 
 

@@ -23,6 +23,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'company',
         'vk_access_token',
         'vk_token_expired_at',
 

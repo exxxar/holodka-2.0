@@ -26,7 +26,11 @@ class PersonController extends Controller
     }
 
     public function getStatistic(Request $request){
+
+        $currentUser = User::query()->find(Auth::user()->id);
+
         $users = User::query()
+            ->where("company",$currentUser->company ?? null)
             ->get();
 
         $tmp = [];
@@ -135,8 +139,11 @@ class PersonController extends Controller
 
     public function cities(Request $request)
     {
+        $user = User::query()->find(Auth::user()->id);
+
         $cities = Person::query()
             ->where("owner_id", Auth::user()->id)
+            ->where("from", $user->company)
             ->whereNotNull("city")
             ->distinct()
             ->pluck("city");
@@ -149,8 +156,11 @@ class PersonController extends Controller
 
     public function groups(Request $request)
     {
+        $user = User::query()->find(Auth::user()->id);
+
         $groups = Person::query()
             ->where("owner_id", Auth::user()->id)
+            ->where("from", $user->company)
             ->whereNotNull("vk_group_link")
             ->distinct()
             ->pluck("vk_group_link");
@@ -218,8 +228,13 @@ class PersonController extends Controller
 
         $size = $size ?? config('app.results_per_page');
 
+        $user = User::query()->find(Auth::user()->id);
+
+
         $persons = Person::query()
-            ->where("owner_id", Auth::user()->id);
+            ->where("owner_id", $user->id)
+            ->where("from", $user->company);
+
 
         if (!is_null($search))
             $persons = $persons

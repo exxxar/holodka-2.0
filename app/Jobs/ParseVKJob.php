@@ -11,6 +11,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class ParseVKJob implements ShouldQueue
@@ -60,7 +61,7 @@ class ParseVKJob implements ShouldQueue
         $job->completed_at = Carbon::now();
         $job->save();
 
-        event(new MyEvent('hello world', $this->userId, $this->group));
+        event(new MyEvent('hello world', $this->userId, $this->group, $jobId));
         Log::info("end job");
     }
 }

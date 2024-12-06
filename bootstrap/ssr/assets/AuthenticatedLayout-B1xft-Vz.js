@@ -211,10 +211,10 @@ const _sfc_main = {
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(` Холодка 2.0 `);
+            _push2(` Поиск `);
           } else {
             return [
-              createTextVNode(" Холодка 2.0 ")
+              createTextVNode(" Поиск ")
             ];
           }
         }),

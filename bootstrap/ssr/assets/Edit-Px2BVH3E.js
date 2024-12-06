@@ -1,6 +1,6 @@
 import { unref, withCtx, createVNode, useSSRContext } from "vue";
 import { ssrRenderComponent } from "vue/server-renderer";
-import { _ as _sfc_main$1 } from "./AuthenticatedLayout-Dv16fU0X.js";
+import { _ as _sfc_main$1 } from "./AuthenticatedLayout-B1xft-Vz.js";
 import _sfc_main$4 from "./DeleteUserForm-DFRCl3Sh.js";
 import _sfc_main$3 from "./UpdatePasswordForm-CYYEVMV-.js";
 import _sfc_main$2 from "./UpdateProfileInformationForm-BwLAAesb.js";

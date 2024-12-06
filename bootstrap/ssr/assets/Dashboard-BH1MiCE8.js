@@ -1,6 +1,6 @@
-import { useSSRContext, unref, withCtx, createVNode, openBlock, createBlock, toDisplayString, createCommentVNode, Fragment, renderList } from "vue";
+import { useSSRContext, unref, withCtx, createVNode, openBlock, createBlock, toDisplayString, createCommentVNode, withDirectives, vModelText, Fragment, renderList } from "vue";
 import { ssrRenderAttr, ssrIncludeBooleanAttr, ssrRenderList, ssrInterpolate, ssrRenderComponent } from "vue/server-renderer";
-import { _ as _sfc_main$3 } from "./AuthenticatedLayout-Dv16fU0X.js";
+import { _ as _sfc_main$3 } from "./AuthenticatedLayout-B1xft-Vz.js";
 import { Head } from "@inertiajs/vue3";
 import { _ as _export_sfc } from "./_plugin-vue_export-helper-1tPrXgE0.js";
 import { P as Pagination } from "./Pagination-2FDkcWjj.js";
@@ -152,11 +152,13 @@ const __default__ = {
   data() {
     return {
       link: null,
+      company: null,
       messages: []
     };
   },
   mounted() {
     this.requestToken();
+    this.company = this.user.company || null;
     let channel = pusher.subscribe("my-channel");
     channel.bind("my-event", (data) => {
       if (data.userId === this.user.id) {
@@ -180,6 +182,13 @@ const __default__ = {
   methods: {
     fillVK() {
       this.$store.dispatch("fillVK").then((resp) => {
+      });
+    },
+    storeCompany() {
+      this.$store.dispatch("storeCompany", {
+        company: this.company
+      }).then((resp) => {
+        window.location.reload();
       });
     },
     requestToken() {
@@ -208,9 +217,9 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
         }),
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div class="py-12"${_scopeId}><div class="max-w-7xl mx-auto sm:px-6 lg:px-8"${_scopeId}><div class="bg-white overflow-hidden shadow-sm sm:rounded-lg"${_scopeId}><div class="row p-3"${_scopeId}><div class="col-4"${_scopeId}><div class="card"${_scopeId}><div class="card-body"${_scopeId}><h6 class="my-2 fw-bold"${_scopeId}>Профиль пользователя</h6>`);
+            _push2(`<div class="py-12"${_scopeId}><div class="max-w-7xl mx-auto sm:px-6 lg:px-8"${_scopeId}><div class="bg-white overflow-hidden shadow-sm sm:rounded-lg"${_scopeId}><div class="row p-3"${_scopeId}><div class="col-4"${_scopeId}><div class="card rounded-0"${_scopeId}><div class="card-body"${_scopeId}><h6 class="my-2 fw-bold"${_scopeId}>Профиль пользователя</h6>`);
             if (_ctx.user) {
-              _push2(`<ul class="list-group"${_scopeId}><li class="list-group-item"${_scopeId}>${ssrInterpolate(_ctx.user.name || "Без имени")}</li><li class="list-group-item"${_scopeId}>${ssrInterpolate(_ctx.user.email || "Без почты")}</li><li class="list-group-item"${_scopeId}>`);
+              _push2(`<ul class="list-group rounded-0"${_scopeId}><li class="list-group-item"${_scopeId}>${ssrInterpolate(_ctx.user.name || "Без имени")}</li><li class="list-group-item"${_scopeId}>${ssrInterpolate(_ctx.user.email || "Без почты")}</li><li class="list-group-item"${_scopeId}>`);
               if (_ctx.user.vk_access_token != null && _ctx.user.is_active_token) {
                 _push2(`<p${_scopeId}>Тоукен успешно установлен</p>`);
               } else {
@@ -222,18 +231,36 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
               } else {
                 _push2(`<p${_scopeId}>Тоукен не задан</p>`);
               }
+              _push2(`</li><li class="list-group-item"${_scopeId}><h6 class="my-2"${_scopeId}>Ключ компании</h6>`);
+              if (!_ctx.company || _ctx.company.length < 6) {
+                _push2(`<div class="alert alert-info rounded-0"${_scopeId}> Внимание! Вы должны указать текстовый ключ вашей компании (команды). Это может быть или специально сгенерированный ключ или произвольный ключ длиной от 6 (сейчас ${ssrInterpolate((_ctx.company || "").length)}) символов. </div>`);
+              } else {
+                _push2(`<!---->`);
+              }
+              _push2(`<div class="input-group"${_scopeId}><div class="form-floating"${_scopeId}><input type="text" minlength="6"${ssrRenderAttr("value", _ctx.company)} class="form-control"${_scopeId}><label for=""${_scopeId}>Ключ компании</label></div>`);
+              if (_ctx.user.company) {
+                _push2(`<span class="input-group-text rounded-0 bg-primary border-black"${_scopeId}><button class="btn text-white"${_scopeId}><i class="bi bi-arrow-repeat"${_scopeId}></i></button></span>`);
+              } else {
+                _push2(`<!---->`);
+              }
+              _push2(`</div>`);
+              if (!_ctx.user.company) {
+                _push2(`<button${ssrIncludeBooleanAttr(!_ctx.company || (_ctx.company || "").length < 6) ? " disabled" : ""} class="btn btn-primary rounded-0 p-3 my-2 w-100"${_scopeId}>Сохранить</button>`);
+              } else {
+                _push2(`<!---->`);
+              }
               _push2(`</li></ul>`);
             } else {
               _push2(`<!---->`);
             }
-            if (_ctx.link) {
-              _push2(`<a class="btn btn-success mt-2 w-100 rounded-2"${ssrRenderAttr("href", _ctx.link)}${_scopeId}>Получить токен</a>`);
+            if (_ctx.link && _ctx.user.company) {
+              _push2(`<a class="btn btn-success mt-2 w-100 rounded-0 p-3"${ssrRenderAttr("href", _ctx.link)}${_scopeId}>Получить токен</a>`);
             } else {
               _push2(`<!---->`);
             }
             _push2(`<hr class="my-2"${_scopeId}><!--[-->`);
             ssrRenderList(_ctx.messages, (message) => {
-              _push2(`<div class="alert alert-success mb-2"${_scopeId}> Собраны данные по группе ${ssrInterpolate(message.group)} (#${ssrInterpolate(message.jobId)}) </div>`);
+              _push2(`<div class="alert alert-success mb-2 rounded-0"${_scopeId}> Собраны данные по группе ${ssrInterpolate(message.group)} (#${ssrInterpolate(message.jobId)}) </div>`);
             });
             _push2(`<!--]--></div></div></div><div class="col-8"${_scopeId}>`);
             _push2(ssrRenderComponent(RequestVKForm, null, null, _parent2, _scopeId));
@@ -247,12 +274,12 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
                   createVNode("div", { class: "bg-white overflow-hidden shadow-sm sm:rounded-lg" }, [
                     createVNode("div", { class: "row p-3" }, [
                       createVNode("div", { class: "col-4" }, [
-                        createVNode("div", { class: "card" }, [
+                        createVNode("div", { class: "card rounded-0" }, [
                           createVNode("div", { class: "card-body" }, [
                             createVNode("h6", { class: "my-2 fw-bold" }, "Профиль пользователя"),
                             _ctx.user ? (openBlock(), createBlock("ul", {
                               key: 0,
-                              class: "list-group"
+                              class: "list-group rounded-0"
                             }, [
                               createVNode("li", { class: "list-group-item" }, toDisplayString(_ctx.user.name || "Без имени"), 1),
                               createVNode("li", { class: "list-group-item" }, toDisplayString(_ctx.user.email || "Без почты"), 1),
@@ -261,16 +288,51 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
                               ]),
                               createVNode("li", { class: "list-group-item" }, [
                                 _ctx.user.vk_token_expired_at != null ? (openBlock(), createBlock("p", { key: 0 }, toDisplayString(_ctx.user.vk_token_expired_at), 1)) : (openBlock(), createBlock("p", { key: 1 }, "Тоукен не задан"))
+                              ]),
+                              createVNode("li", { class: "list-group-item" }, [
+                                createVNode("h6", { class: "my-2" }, "Ключ компании"),
+                                !_ctx.company || _ctx.company.length < 6 ? (openBlock(), createBlock("div", {
+                                  key: 0,
+                                  class: "alert alert-info rounded-0"
+                                }, " Внимание! Вы должны указать текстовый ключ вашей компании (команды). Это может быть или специально сгенерированный ключ или произвольный ключ длиной от 6 (сейчас " + toDisplayString((_ctx.company || "").length) + ") символов. ", 1)) : createCommentVNode("", true),
+                                createVNode("div", { class: "input-group" }, [
+                                  createVNode("div", { class: "form-floating" }, [
+                                    withDirectives(createVNode("input", {
+                                      type: "text",
+                                      minlength: "6",
+                                      "onUpdate:modelValue": ($event) => _ctx.company = $event,
+                                      class: "form-control"
+                                    }, null, 8, ["onUpdate:modelValue"]), [
+                                      [vModelText, _ctx.company]
+                                    ]),
+                                    createVNode("label", { for: "" }, "Ключ компании")
+                                  ]),
+                                  _ctx.user.company ? (openBlock(), createBlock("span", {
+                                    key: 0,
+                                    onClick: _ctx.storeCompany,
+                                    class: "input-group-text rounded-0 bg-primary border-black"
+                                  }, [
+                                    createVNode("button", { class: "btn text-white" }, [
+                                      createVNode("i", { class: "bi bi-arrow-repeat" })
+                                    ])
+                                  ], 8, ["onClick"])) : createCommentVNode("", true)
+                                ]),
+                                !_ctx.user.company ? (openBlock(), createBlock("button", {
+                                  key: 1,
+                                  onClick: _ctx.storeCompany,
+                                  disabled: !_ctx.company || (_ctx.company || "").length < 6,
+                                  class: "btn btn-primary rounded-0 p-3 my-2 w-100"
+                                }, "Сохранить", 8, ["onClick", "disabled"])) : createCommentVNode("", true)
                               ])
                             ])) : createCommentVNode("", true),
-                            _ctx.link ? (openBlock(), createBlock("a", {
+                            _ctx.link && _ctx.user.company ? (openBlock(), createBlock("a", {
                               key: 1,
-                              class: "btn btn-success mt-2 w-100 rounded-2",
+                              class: "btn btn-success mt-2 w-100 rounded-0 p-3",
                               href: _ctx.link
                             }, "Получить токен", 8, ["href"])) : createCommentVNode("", true),
                             createVNode("hr", { class: "my-2" }),
                             (openBlock(true), createBlock(Fragment, null, renderList(_ctx.messages, (message) => {
-                              return openBlock(), createBlock("div", { class: "alert alert-success mb-2" }, " Собраны данные по группе " + toDisplayString(message.group) + " (#" + toDisplayString(message.jobId) + ") ", 1);
+                              return openBlock(), createBlock("div", { class: "alert alert-success mb-2 rounded-0" }, " Собраны данные по группе " + toDisplayString(message.group) + " (#" + toDisplayString(message.jobId) + ") ", 1);
                             }), 256))
                           ])
                         ])

@@ -311,13 +311,14 @@ import Pagination from "@/Components/Pagination.vue";
             </tr>
             </thead>
             <tbody>
+
             <tr
 
                 v-for="(item, index) in items">
                 <th
                     v-bind:class="{'bg-warning':item.checked_at!=null}"
                     v-if="isFieldActive('id')"
-                    scope="row">{{ item.id || index }}
+                    scope="row">{{ index + 1 + (paginate_object ? paginate_object.meta.current_page - 1 : 0) * 30 }}
                 </th>
 
                 <td
@@ -471,7 +472,13 @@ import Pagination from "@/Components/Pagination.vue";
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <template v-for="(item,index) in cities">
+
+                    <div class="form-floating">
+                        <input type="search" class="form-control" v-model="city_search">
+                        <label for="">Фильтрация города</label>
+                    </div>
+                    <hr class="my-3">
+                    <template v-for="(item,index) in filteredCities">
                        <span class="badge m-0 cursor-pointer"
                              @click="changeCityFilter(item)"
                              v-bind:class="{'bg-primary':sort.filters.cities.indexOf(item)!==-1, 'bg-secondary text-white':sort.filters.cities.indexOf(item)===-1}"
@@ -533,6 +540,7 @@ export default {
                 }
             },
             search: null,
+            city_search: null,
             current_page: 0,
             paginate_object: null,
             cities: [],
@@ -693,7 +701,13 @@ export default {
         selectedGroups() {
             return this.groups.filter(item => this.sort.filters.groups.indexOf(item) !== -1)
         },
-        user(){
+        filteredCities() {
+            if (!this.city_search)
+                return this.cities
+
+            return this.cities.filter(item => item.toLowerCase().indexOf(this.city_search.toLowerCase()) !== -1)
+        },
+        user() {
             return window.user
         }
     },
@@ -705,11 +719,10 @@ export default {
 
         let channel = pusher.subscribe('my-channel');
         channel.bind('my-event', (data) => {
-            if (data.userId === this.user.id)
-            {
+            if (data.userId === this.user.id) {
                 this.$notify({
                     title: 'Внимание!',
-                    text: 'Ваше задание #'+data.jobId+" успешно выполнено!",
+                    text: 'Ваше задание #' + data.jobId + " успешно выполнено!",
                     type: 'success'
                 })
             }

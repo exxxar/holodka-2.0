@@ -99,6 +99,9 @@ Route::any('/vk/auth', function (Request $request) {
 });
 
 Route::get('/', function () {
+    if (!is_null(Auth::user()->id ?? null))
+        return redirect()->route("dashboard");
+
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
@@ -171,6 +174,19 @@ Route::middleware('auth')->group(function () {
             $user->vk_access_token)
             ->delay(now()->addSeconds(5));
     });
+
+    Route::post("/store-company", function (\Illuminate\Http\Request $request) {
+        $request->validate([
+            "company" => "required|min:6",
+        ]);
+
+        $user = User::query()->find(Auth::user()->id);
+
+        $user->company = $request->company ?? null;
+        $user->save();
+      return response()->noContent();
+    });
+
 
     Route::post("/get-vk-token", function (\Illuminate\Http\Request $request) {
         $vk = new VKBusinessLogic();
