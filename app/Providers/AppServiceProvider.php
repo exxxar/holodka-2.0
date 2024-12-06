@@ -21,7 +21,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         //
-        DB::statement("SET GLOBAL max_connections = 200");
+      //      DB::statement("SET GLOBAL max_connections = 200");
 
     }
 }
