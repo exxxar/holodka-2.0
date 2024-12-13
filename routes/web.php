@@ -31,7 +31,12 @@ use VK\OAuth\VKOAuth;
 */
 
 Route::get('/pusher', function(){
-    event(new MyEvent('hello world', 2, "test", 2));
+   // event(new MyEvent('hello world', 2, "test", 2));
+
+    $data = 'Sample data';
+
+    ParseVKJob::dispatch($data)->delay(now()->addSeconds(10))
+        ->onQueue('vk');
 });
 
 Route::get('/redis', function () {
