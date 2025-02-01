@@ -233,7 +233,7 @@ class PersonController extends Controller
 
         $persons = Person::query()
             ->where("owner_id", $user->id)
-            ->where("from", $user->company);
+            ->where("from",  env("PRODUCT_KEY") );
 
 
         if (!is_null($search))
@@ -304,48 +304,6 @@ class PersonController extends Controller
         return new PersonCollection($persons);
     }
 
-
-    public function store(Request $request)
-    {
-        // dd($request);
-        $request->validate([
-            "name" => "required"
-        ]);
-
-        $id = $request->id ?? null;
-
-        $tmp = [
-            'status' => $request->status ?? null,
-            'phone' => $request->phone ?? null,
-            'email' => $request->email ?? null,
-            'fact_address' => $request->fact_address ?? null,
-            'comment' => $request->comment ?? null,
-            'user_id' => $request->user_id ?? null,
-            'title' => $request->title ?? null,
-            'law_address' => $request->law_address ?? null,
-            'inn' => $request->inn ?? null,
-            'kpp' => $request->kpp ?? null,
-            'ogrn' => $request->ogrn ?? null,
-            'okpo' => $request->okpo ?? null,
-            'requisites' => $requisites,
-            'fio' => $request->fio ?? null
-        ];
-
-        if (is_null($id))
-            $client = Person::query()
-                ->create($tmp);
-        else {
-            $client = Person::query()->find($id);
-
-            if (is_null($client))
-                return response()->noContent(404);
-
-            $client->update($tmp);
-
-        }
-
-        return new PersonResource($client);
-    }
 
 
     public function destroy(Request $request, $id): \Illuminate\Http\Response
