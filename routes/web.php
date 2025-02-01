@@ -126,12 +126,11 @@ Route::middleware('auth')->group(function () {
 
     Route::post("/get-vk-link", function (\Illuminate\Http\Request $request) {
         $request->validate([
-            "max_post_count" => "required|integer",
             "group" => "required",
         ]);
 
         $state = base64_encode(json_encode([
-            "max_post_count" => $request->max_post_count ?? 10,
+            "max_post_count" => env("POST_LIMIT") ?? 10,
             "group" => $request->group ?? '',
         ]));
         $vk = new VKBusinessLogic();
@@ -161,7 +160,7 @@ Route::middleware('auth')->group(function () {
         $user = User::query()->find(Auth::user()->id);
 
         $group = $request->group;
-        $max = env("post_limit") ?? 10;
+        $max = env("POST_LIMIT") ?? 10;
 
         $job = \App\Models\UserJob::query()->create([
             "group" => $group,
