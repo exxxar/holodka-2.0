@@ -428,9 +428,9 @@ import Pagination from "@/Components/Pagination.vue";
                 </td>
 
                 <td
-                    v-if="isFieldActive('is_message_closed')"
+                    v-if="isFieldActive('is_profile_closed')"
                     class="text-center">
-                    {{ item.is_message_closed ? 'Закрытый' : 'Открытый' }}
+                    {{ item.is_profile_closed ? 'Закрытый' : 'Открытый' }}
                 </td>
 
                 <td

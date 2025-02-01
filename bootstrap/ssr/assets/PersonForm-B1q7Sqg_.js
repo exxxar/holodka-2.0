@@ -728,8 +728,8 @@ const _sfc_main$1 = /* @__PURE__ */ Object.assign(__default__, {
             } else {
               _push(`<!---->`);
             }
-            if (_ctx.isFieldActive("is_message_closed")) {
-              _push(`<td class="text-center">${ssrInterpolate(item.is_message_closed ? "Закрытый" : "Открытый")}</td>`);
+            if (_ctx.isFieldActive("is_profile_closed")) {
+              _push(`<td class="text-center">${ssrInterpolate(item.is_profile_closed ? "Закрытый" : "Открытый")}</td>`);
             } else {
               _push(`<!---->`);
             }
