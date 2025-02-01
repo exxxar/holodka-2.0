@@ -591,14 +591,14 @@ const _sfc_main$1 = /* @__PURE__ */ Object.assign(__default__, {
           } else {
             _push(`<!---->`);
           }
-          if (_ctx.isFieldActive("is_message_closed")) {
+          if (_ctx.isFieldActive("is_profile_closed")) {
             _push(`<th scope="col" class="text-center cursor-pointer">Закрыт профиль? `);
-            if (_ctx.sort.direction === "desc" && _ctx.sort.column === "is_message_closed") {
+            if (_ctx.sort.direction === "desc" && _ctx.sort.column === "is_profile_closed") {
               _push(`<span><i class="fa-solid fa-caret-down"></i></span>`);
             } else {
               _push(`<!---->`);
             }
-            if (_ctx.sort.direction === "asc" && _ctx.sort.column === "is_message_closed") {
+            if (_ctx.sort.direction === "asc" && _ctx.sort.column === "is_profile_closed") {
               _push(`<span><i class="fa-solid fa-caret-up"></i></span>`);
             } else {
               _push(`<!---->`);

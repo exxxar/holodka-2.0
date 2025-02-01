@@ -1,7 +1,7 @@
 import { unref, withCtx, createVNode, openBlock, createBlock, createCommentVNode, useSSRContext } from "vue";
 import { ssrRenderComponent } from "vue/server-renderer";
 import { _ as _sfc_main$1 } from "./AuthenticatedLayout-B1xft-Vz.js";
-import { _ as _sfc_main$2 } from "./PersonForm-BXXn5BTH.js";
+import { _ as _sfc_main$2 } from "./PersonForm-B48jktFq.js";
 import { Head } from "@inertiajs/vue3";
 import "./ApplicationLogo-B9dF0F9q.js";
 import "./_plugin-vue_export-helper-1tPrXgE0.js";

@@ -291,12 +291,12 @@ import Pagination from "@/Components/Pagination.vue";
                 </th>
 
                 <th
-                    v-if="isFieldActive('is_message_closed')"
-                    scope="col" class="text-center cursor-pointer" @click="sortAndLoad('is_message_closed')">Закрыт
+                    v-if="isFieldActive('is_profile_closed')"
+                    scope="col" class="text-center cursor-pointer" @click="sortAndLoad('is_profile_closed')">Закрыт
                     профиль?
-                    <span v-if="sort.direction === 'desc'&&sort.column === 'is_message_closed'"><i
+                    <span v-if="sort.direction === 'desc'&&sort.column === 'is_profile_closed'"><i
                         class="fa-solid fa-caret-down"></i></span>
-                    <span v-if="sort.direction === 'asc'&&sort.column === 'is_message_closed'"><i
+                    <span v-if="sort.direction === 'asc'&&sort.column === 'is_profile_closed'"><i
                         class="fa-solid fa-caret-up"></i></span>
 
                 </th>
