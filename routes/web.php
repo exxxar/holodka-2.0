@@ -156,13 +156,12 @@ Route::middleware('auth')->group(function () {
     Route::post("/add-work", function (\Illuminate\Http\Request $request) {
         $request->validate([
             "group" => "required",
-            "max_post_count" => "required"
         ]);
 
         $user = User::query()->find(Auth::user()->id);
 
         $group = $request->group;
-        $max = $request->max_post_count ?? 10;
+        $max = env("post_limit") ?? 10;
 
         $job = \App\Models\UserJob::query()->create([
             "group" => $group,

@@ -9,6 +9,7 @@
             <label for="floatingInput">Группа</label>
         </div>
 
+<!--
         <div class="alert alert-info rounded-0">
             Количество постов, которые можно охватить. Чем больше глубина тем дольше время ожидания обработки.
             Рекомендуемое значение от 30 до 100 в зависимости от числа подписчиков в группе. Чем больше подписчиков тем
@@ -22,9 +23,15 @@
                    id="floatingInput" placeholder="name@example.com" required>
             <label for="floatingInput">Глубина обработки страницы</label>
         </div>
+-->
 
         <div class="alert alert-light my-2" v-if="!user.is_active_token">
             Ваш тоукен недействительный! Обновите его!
+
+            <a
+                class="btn btn-success mt-2 w-100 rounded-0 p-3"
+                v-if="link"
+                :href="link">Получить токен</a>
         </div>
         <div class="d-flex w-100 justify-center">
             <button
@@ -35,19 +42,20 @@
 
     </form>
 
-    <div class="d-flex w-100 justify-center mb-2">
+<!--    <div class="d-flex w-100 justify-center mb-2">
 
         <a
             class="btn btn-success  rounded-0"
             v-if="link"
             :href="link">Запустить процесс</a>
-    </div>
+    </div>-->
 
 </template>
 <script>
 export default {
     data() {
         return {
+            link: null,
             form: {
                 group: null,
                 max_post_count: 30,
@@ -71,12 +79,21 @@ export default {
             deep: true
         }
     },
+    mounted() {
+        this.requestToken()
+    },
     methods: {
         submit() {
             this.$store.dispatch("addWork", this.form)
                 .then(resp => {
                     const customEvent = new CustomEvent('jobs-reload-event');
                     document.dispatchEvent(customEvent)
+                })
+        },
+        requestToken() {
+            this.$store.dispatch("requestVKToken")
+                .then(resp => {
+                    this.link = resp
                 })
         }
     }

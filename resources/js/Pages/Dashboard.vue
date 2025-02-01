@@ -37,7 +37,7 @@ import JobsTable from "@/Components/Persons/JobsTable.vue";
                                             <p v-if="user.vk_token_expired_at!=null">{{ user.vk_token_expired_at }}</p>
                                             <p v-else>Тоукен не задан</p>
                                         </li>
-                                        <li class="list-group-item">
+<!--                                        <li class="list-group-item">
                                            <h6 class="my-2">Ключ компании</h6>
 
                                             <div class="alert alert-info rounded-0" v-if="!company||company.length<6">
@@ -66,7 +66,7 @@ import JobsTable from "@/Components/Persons/JobsTable.vue";
                                                 :disabled="!company || (company||'').length<6"
                                                 class="btn btn-primary rounded-0 p-3 my-2 w-100">Сохранить</button>
 
-                                        </li>
+                                        </li>-->
                                     </ul>
 
                                     <!--                                    <button

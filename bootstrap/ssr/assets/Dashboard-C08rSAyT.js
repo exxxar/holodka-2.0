@@ -1,5 +1,5 @@
-import { useSSRContext, unref, withCtx, createVNode, openBlock, createBlock, toDisplayString, createCommentVNode, withDirectives, vModelText, Fragment, renderList } from "vue";
-import { ssrRenderAttr, ssrIncludeBooleanAttr, ssrRenderList, ssrInterpolate, ssrRenderComponent } from "vue/server-renderer";
+import { mergeProps, useSSRContext, unref, withCtx, createVNode, openBlock, createBlock, toDisplayString, createCommentVNode, Fragment, renderList } from "vue";
+import { ssrRenderAttrs, ssrRenderAttr, ssrIncludeBooleanAttr, ssrRenderList, ssrInterpolate, ssrRenderComponent } from "vue/server-renderer";
 import { _ as _sfc_main$3 } from "./AuthenticatedLayout-B1xft-Vz.js";
 import { Head } from "@inertiajs/vue3";
 import { _ as _export_sfc } from "./_plugin-vue_export-helper-1tPrXgE0.js";
@@ -9,6 +9,7 @@ import "./ApplicationLogo-B9dF0F9q.js";
 const _sfc_main$2 = {
   data() {
     return {
+      link: null,
       form: {
         group: null,
         max_post_count: 30
@@ -31,29 +32,37 @@ const _sfc_main$2 = {
       deep: true
     }
   },
+  mounted() {
+    this.requestToken();
+  },
   methods: {
     submit() {
       this.$store.dispatch("addWork", this.form).then((resp) => {
         const customEvent = new CustomEvent("jobs-reload-event");
         document.dispatchEvent(customEvent);
       });
+    },
+    requestToken() {
+      this.$store.dispatch("requestVKToken").then((resp) => {
+        this.link = resp;
+      });
     }
   }
 };
 function _sfc_ssrRender(_ctx, _push, _parent, _attrs, $props, $setup, $data, $options) {
-  _push(`<!--[--><form class="mb-2"><div class="form-floating mb-3"><input type="text" class="form-control"${ssrRenderAttr("value", $data.form.group)} id="floatingInput" placeholder="name@example.com" required><label for="floatingInput">Группа</label></div><div class="alert alert-info rounded-0"> Количество постов, которые можно охватить. Чем больше глубина тем дольше время ожидания обработки. Рекомендуемое значение от 30 до 100 в зависимости от числа подписчиков в группе. Чем больше подписчиков тем ниже должна быть глубина обработки. </div><div class="form-floating mb-3"><input type="number" class="form-control"${ssrRenderAttr("value", $data.form.max_post_count)} max="100" id="floatingInput" placeholder="name@example.com" required><label for="floatingInput">Глубина обработки страницы</label></div>`);
+  _push(`<form${ssrRenderAttrs(mergeProps({ class: "mb-2" }, _attrs))}><div class="form-floating mb-3"><input type="text" class="form-control"${ssrRenderAttr("value", $data.form.group)} id="floatingInput" placeholder="name@example.com" required><label for="floatingInput">Группа</label></div>`);
   if (!$options.user.is_active_token) {
-    _push(`<div class="alert alert-light my-2"> Ваш тоукен недействительный! Обновите его! </div>`);
+    _push(`<div class="alert alert-light my-2"> Ваш тоукен недействительный! Обновите его! `);
+    if ($data.link) {
+      _push(`<a class="btn btn-success mt-2 w-100 rounded-0 p-3"${ssrRenderAttr("href", $data.link)}>Получить токен</a>`);
+    } else {
+      _push(`<!---->`);
+    }
+    _push(`</div>`);
   } else {
     _push(`<!---->`);
   }
-  _push(`<div class="d-flex w-100 justify-center"><button${ssrIncludeBooleanAttr(!$options.user.is_active_token) ? " disabled" : ""} class="btn btn-primary rounded-0">Добавить задачу </button></div></form><div class="d-flex w-100 justify-center mb-2">`);
-  if (_ctx.link) {
-    _push(`<a class="btn btn-success rounded-0"${ssrRenderAttr("href", _ctx.link)}>Запустить процесс</a>`);
-  } else {
-    _push(`<!---->`);
-  }
-  _push(`</div><!--]-->`);
+  _push(`<div class="d-flex w-100 justify-center"><button${ssrIncludeBooleanAttr(!$options.user.is_active_token) ? " disabled" : ""} class="btn btn-primary rounded-0">Добавить задачу </button></div></form>`);
 }
 const _sfc_setup$2 = _sfc_main$2.setup;
 _sfc_main$2.setup = (props, ctx) => {
@@ -231,24 +240,6 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
               } else {
                 _push2(`<p${_scopeId}>Тоукен не задан</p>`);
               }
-              _push2(`</li><li class="list-group-item"${_scopeId}><h6 class="my-2"${_scopeId}>Ключ компании</h6>`);
-              if (!_ctx.company || _ctx.company.length < 6) {
-                _push2(`<div class="alert alert-info rounded-0"${_scopeId}> Внимание! Вы должны указать текстовый ключ вашей компании (команды). Это может быть или специально сгенерированный ключ или произвольный ключ длиной от 6 (сейчас ${ssrInterpolate((_ctx.company || "").length)}) символов. </div>`);
-              } else {
-                _push2(`<!---->`);
-              }
-              _push2(`<div class="input-group"${_scopeId}><div class="form-floating"${_scopeId}><input type="text" minlength="6"${ssrRenderAttr("value", _ctx.company)} class="form-control"${_scopeId}><label for=""${_scopeId}>Ключ компании</label></div>`);
-              if (_ctx.user.company) {
-                _push2(`<span class="input-group-text rounded-0 bg-primary border-black"${_scopeId}><button class="btn text-white"${_scopeId}><i class="bi bi-arrow-repeat"${_scopeId}></i></button></span>`);
-              } else {
-                _push2(`<!---->`);
-              }
-              _push2(`</div>`);
-              if (!_ctx.user.company) {
-                _push2(`<button${ssrIncludeBooleanAttr(!_ctx.company || (_ctx.company || "").length < 6) ? " disabled" : ""} class="btn btn-primary rounded-0 p-3 my-2 w-100"${_scopeId}>Сохранить</button>`);
-              } else {
-                _push2(`<!---->`);
-              }
               _push2(`</li></ul>`);
             } else {
               _push2(`<!---->`);
@@ -288,41 +279,6 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
                               ]),
                               createVNode("li", { class: "list-group-item" }, [
                                 _ctx.user.vk_token_expired_at != null ? (openBlock(), createBlock("p", { key: 0 }, toDisplayString(_ctx.user.vk_token_expired_at), 1)) : (openBlock(), createBlock("p", { key: 1 }, "Тоукен не задан"))
-                              ]),
-                              createVNode("li", { class: "list-group-item" }, [
-                                createVNode("h6", { class: "my-2" }, "Ключ компании"),
-                                !_ctx.company || _ctx.company.length < 6 ? (openBlock(), createBlock("div", {
-                                  key: 0,
-                                  class: "alert alert-info rounded-0"
-                                }, " Внимание! Вы должны указать текстовый ключ вашей компании (команды). Это может быть или специально сгенерированный ключ или произвольный ключ длиной от 6 (сейчас " + toDisplayString((_ctx.company || "").length) + ") символов. ", 1)) : createCommentVNode("", true),
-                                createVNode("div", { class: "input-group" }, [
-                                  createVNode("div", { class: "form-floating" }, [
-                                    withDirectives(createVNode("input", {
-                                      type: "text",
-                                      minlength: "6",
-                                      "onUpdate:modelValue": ($event) => _ctx.company = $event,
-                                      class: "form-control"
-                                    }, null, 8, ["onUpdate:modelValue"]), [
-                                      [vModelText, _ctx.company]
-                                    ]),
-                                    createVNode("label", { for: "" }, "Ключ компании")
-                                  ]),
-                                  _ctx.user.company ? (openBlock(), createBlock("span", {
-                                    key: 0,
-                                    onClick: _ctx.storeCompany,
-                                    class: "input-group-text rounded-0 bg-primary border-black"
-                                  }, [
-                                    createVNode("button", { class: "btn text-white" }, [
-                                      createVNode("i", { class: "bi bi-arrow-repeat" })
-                                    ])
-                                  ], 8, ["onClick"])) : createCommentVNode("", true)
-                                ]),
-                                !_ctx.user.company ? (openBlock(), createBlock("button", {
-                                  key: 1,
-                                  onClick: _ctx.storeCompany,
-                                  disabled: !_ctx.company || (_ctx.company || "").length < 6,
-                                  class: "btn btn-primary rounded-0 p-3 my-2 w-100"
-                                }, "Сохранить", 8, ["onClick", "disabled"])) : createCommentVNode("", true)
                               ])
                             ])) : createCommentVNode("", true),
                             _ctx.link && _ctx.user.company ? (openBlock(), createBlock("a", {
