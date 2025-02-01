@@ -25,29 +25,30 @@ class PersonController extends Controller
         return Inertia::render('Persons');
     }
 
-    public function getStatistic(Request $request){
+    public function getStatistic(Request $request)
+    {
 
         $currentUser = User::query()->find(Auth::user()->id);
 
         $users = User::query()
-            ->where("company",env("PRODUCT_KEY") ?? null)
+            ->where("company", env("PRODUCT_KEY") ?? null)
             ->get();
 
         $tmp = [];
-        foreach ($users as $user){
+        foreach ($users as $user) {
 
-            $persons  = Person::query()
-                ->where("owner_id",$user->id)
+            $persons = Person::query()
+                ->where("owner_id", $user->id)
                 ->get();
 
             $tmp[] = (object)[
-                "name"=>$user->name,
-                "checked"=>Collection::make($persons)->whereNotNull("checked_at")->count(),
-                "new"=>Collection::make($persons)->where("status", 0)->count(),
-                "in_process"=>Collection::make($persons)->where("status", 1)->count(),
-                "not_ready"=>Collection::make($persons)->where("status", 3)->count(),
-                "decline"=>Collection::make($persons)->where("status", 2)->count(),
-                "success"=>Collection::make($persons)->where("status", 4)->count(),
+                "name" => $user->name,
+                "checked" => Collection::make($persons)->whereNotNull("checked_at")->count(),
+                "new" => Collection::make($persons)->where("status", 0)->count(),
+                "in_process" => Collection::make($persons)->where("status", 1)->count(),
+                "not_ready" => Collection::make($persons)->where("status", 3)->count(),
+                "decline" => Collection::make($persons)->where("status", 2)->count(),
+                "success" => Collection::make($persons)->where("status", 4)->count(),
             ];
 
         }
@@ -223,6 +224,7 @@ class PersonController extends Controller
         $search = $request->search ?? null;
         $order = $request->order ?? "id";
         $direction = $request->direction ?? "asc";
+        $isMessageClosed = $request->is_message_closed ?? null;
 
         $filters = $request->filters ?? null;
 
@@ -233,7 +235,7 @@ class PersonController extends Controller
 
         $persons = Person::query()
             ->where("owner_id", $user->id)
-            ->where("from",  env("PRODUCT_KEY") );
+            ->where("from", env("PRODUCT_KEY"));
 
 
         if (!is_null($search))
@@ -259,6 +261,11 @@ class PersonController extends Controller
                     $persons = $persons
                         ->orWhereNull("vk_group_link");
 
+            }
+
+            if (!is_null($isMessageClosed)) {
+                $persons = $persons
+                    ->where("is_messages_closed", $isMessageClosed);
             }
 
 
@@ -303,7 +310,6 @@ class PersonController extends Controller
 
         return new PersonCollection($persons);
     }
-
 
 
     public function destroy(Request $request, $id): \Illuminate\Http\Response

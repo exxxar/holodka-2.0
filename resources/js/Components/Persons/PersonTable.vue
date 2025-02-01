@@ -51,6 +51,31 @@ import Pagination from "@/Components/Pagination.vue";
         </div>
     </div>
 
+    <div class="alert alert-light my-2 rounded-0">
+
+        <div class="d-flex w-100 flex-wrap align-items-center">
+            <h6 class="mr-2">Тип профиля: </h6>
+            <span class="badge m-0 cursor-pointer"
+                  @click="changeMessageType(null)"
+                  v-bind:class="{'bg-primary':sort.filters.is_message_closed == null, 'bg-secondary text-white':sort.filters.is_message_closed != null}">
+            Не учитывать тип профиля
+        </span>,
+
+            <span class="badge m-0 cursor-pointer"
+                  @click="changeMessageType(0)"
+                  v-bind:class="{'bg-primary':sort.filters.is_message_closed === 0, 'bg-secondary text-white':sort.filters.is_message_closed !== 0}">
+            Открытый
+        </span>,
+
+            <span class="badge m-0 cursor-pointer"
+                  @click="changeMessageType(1)"
+                  v-bind:class="{'bg-primary':sort.filters.is_message_closed === 1, 'bg-secondary text-white':sort.filters.is_message_closed !== 1}">
+            Закрытый
+        </span>
+
+        </div>
+    </div>
+
     <div class="alert alert-light my-2 rounded-0" v-if="loaded_groups">
 
         <div class="d-flex w-100 flex-wrap align-items-center">
@@ -266,12 +291,12 @@ import Pagination from "@/Components/Pagination.vue";
                 </th>
 
                 <th
-                    v-if="isFieldActive('is_profile_closed')"
-                    scope="col" class="text-center cursor-pointer" @click="sortAndLoad('is_profile_closed')">Закрыт
+                    v-if="isFieldActive('is_message_closed')"
+                    scope="col" class="text-center cursor-pointer" @click="sortAndLoad('is_message_closed')">Закрыт
                     профиль?
-                    <span v-if="sort.direction === 'desc'&&sort.column === 'is_profile_closed'"><i
+                    <span v-if="sort.direction === 'desc'&&sort.column === 'is_message_closed'"><i
                         class="fa-solid fa-caret-down"></i></span>
-                    <span v-if="sort.direction === 'asc'&&sort.column === 'is_profile_closed'"><i
+                    <span v-if="sort.direction === 'asc'&&sort.column === 'is_message_closed'"><i
                         class="fa-solid fa-caret-up"></i></span>
 
                 </th>
@@ -403,9 +428,9 @@ import Pagination from "@/Components/Pagination.vue";
                 </td>
 
                 <td
-                    v-if="isFieldActive('is_profile_closed')"
+                    v-if="isFieldActive('is_message_closed')"
                     class="text-center">
-                    {{ item.is_profile_closed ? 'Закрытый' : 'Открытый' }}
+                    {{ item.is_message_closed ? 'Закрытый' : 'Открытый' }}
                 </td>
 
                 <td
@@ -533,6 +558,7 @@ export default {
                     statuses: [],
                     cities: [],
                     groups: [],
+                    is_message_closed: null, //0,1
                     age: {
                         from: null,
                         to: null,
@@ -628,7 +654,7 @@ export default {
 
                 {
                     title: "Профиль открыть",
-                    key: "is_profile_closed",
+                    key: "is_message_closed",
                     order: 0,
                     active: false,
                 },
@@ -680,7 +706,7 @@ export default {
                     common_count: 0,
                     home_town: null,
                     last_seen: null,
-                    is_profile_closed: false,
+                    is_message_closed: false,
                     is_messages_closed: false,
                     deactivated: false,
                     owner_id: null,
@@ -748,7 +774,9 @@ export default {
 
             })
         },
-
+        changeMessageType(type) {
+            this.sort.filters.is_message_closed = type
+        },
         loadAllGroups() {
 
             this.loaded_groups = false
@@ -815,6 +843,7 @@ export default {
             this.sort.filters.age.to = null
             this.sort.filters.cities = []
             this.sort.filters.statuses = []
+            this.sort.filters.is_message_closed = null
             this.search = null
             this.loadPersons(0)
         },
