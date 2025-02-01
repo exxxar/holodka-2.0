@@ -56,7 +56,7 @@ defineProps({
 
                 <a
                     :href="route('vk.login-url')"
-                    style="background-color: darkred;"
+                    style="background-color: #00a498;"
                     class="btn text-white shadow-xl rounded-0 px-5 py-3 my-5">Войти в систему</a>
             </div>
 

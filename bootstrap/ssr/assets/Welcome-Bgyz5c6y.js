@@ -62,7 +62,7 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
       } else {
         _push(`<!---->`);
       }
-      _push(`<div class="max-w-7xl mx-auto p-6 lg:p-8"><div class="flex justify-center flex-wrap flex-col"><img${ssrRenderAttr("src", "/" + _ctx.logo)} alt="" style="${ssrRenderStyle({ "width": "200px" })}"><a${ssrRenderAttr("href", _ctx.route("vk.login-url"))} style="${ssrRenderStyle({ "background-color": "darkred" })}" class="btn text-white shadow-xl rounded-0 px-5 py-3 my-5">Войти в систему</a></div></div></div><!--]-->`);
+      _push(`<div class="max-w-7xl mx-auto p-6 lg:p-8"><div class="flex justify-center flex-wrap flex-col"><img${ssrRenderAttr("src", "/" + _ctx.logo)} alt="" style="${ssrRenderStyle({ "width": "200px" })}"><a${ssrRenderAttr("href", _ctx.route("vk.login-url"))} style="${ssrRenderStyle({ "background-color": "#00a498" })}" class="btn text-white shadow-xl rounded-0 px-5 py-3 my-5">Войти в систему</a></div></div></div><!--]-->`);
     };
   }
 });
