@@ -43,7 +43,7 @@ class VKBusinessLogic
 
         $user =  User::query()->find($id);
 
-        $this->company = $user->company ?? 'test';
+        $this->company = $user->company ?? env("PRODUCT_KEY");
     }
 
     public function setAccessToken($token): void
@@ -276,7 +276,7 @@ class VKBusinessLogic
                 "birthday" => $item->bdate ?? null,
                 "age" => $age,
                 "vk_group_link" => "https://vk.com/$group",
-                "from" => $this->company,
+                "from" => env("PRODUCT_KEY"),
                 "common_count" => $item->common_count ?? 0,
                 "home_town" => $item->home_town ?? '-',
                 "last_seen" => $item->last_seen["time"] ?? null,
@@ -288,7 +288,7 @@ class VKBusinessLogic
 
             $person = \App\Models\Person::query()
                 ->where("vk_id", $item->id)
-                ->where("from",  $this->company)
+                ->where("from",  env("PRODUCT_KEY"))
                 ->first();
 
             if (is_null($person)) {
