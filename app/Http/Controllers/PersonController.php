@@ -30,7 +30,7 @@ class PersonController extends Controller
         $currentUser = User::query()->find(Auth::user()->id);
 
         $users = User::query()
-            ->where("company",$currentUser->company ?? null)
+            ->where("company",env("PRODUCT_KEY") ?? null)
             ->get();
 
         $tmp = [];
@@ -143,7 +143,7 @@ class PersonController extends Controller
 
         $cities = Person::query()
             ->where("owner_id", Auth::user()->id)
-            ->where("from", $user->company)
+            ->where("from", env("PRODUCT_KEY"))
             ->whereNotNull("city")
             ->distinct()
             ->pluck("city");
@@ -160,7 +160,7 @@ class PersonController extends Controller
 
         $groups = Person::query()
             ->where("owner_id", Auth::user()->id)
-            ->where("from", $user->company)
+            ->where("from", env("PRODUCT_KEY"))
             ->whereNotNull("vk_group_link")
             ->distinct()
             ->pluck("vk_group_link");
