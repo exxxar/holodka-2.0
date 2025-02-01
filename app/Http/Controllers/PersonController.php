@@ -224,7 +224,7 @@ class PersonController extends Controller
         $search = $request->search ?? null;
         $order = $request->order ?? "id";
         $direction = $request->direction ?? "asc";
-        $isMessageClosed = $request->is_message_closed ?? null;
+
 
         $filters = $request->filters ?? null;
 
@@ -244,6 +244,8 @@ class PersonController extends Controller
                 ->orWhere("city", 'like', "%$search%");
 
         if (!is_null($filters)) {
+
+            $isMessageClosed = $filters["is_message_closed"] ?? null;
 
             $needEmptyCity = count(array_filter($filters["cities"] ?? [], function ($item) {
                     return $item === "Без города";
