@@ -17,8 +17,15 @@
         @if(in_array("id", $fields))
         <th style="width: 200px;">Ф.И.О.</th>
         @endif
+
         @if(in_array("vk_user_link", $fields))
         <th style="width: 200px;">Ссылка ВК</th>
+        @endif
+        @if(in_array("vk_group_link", $fields))
+            <th style="width: 200px;">Группа вк</th>
+        @endif
+        @if(in_array("age", $fields))
+            <th>Возраст</th>
         @endif
         @if(in_array("city", $fields))
         <th>Город проживания</th>
@@ -28,12 +35,6 @@
         @endif
         @if(in_array("birthday", $fields))
         <th>День рождения</th>
-        @endif
-        @if(in_array("age", $fields))
-        <th>Возраст</th>
-        @endif
-        @if(in_array("vk_group_link", $fields))
-        <th style="width: 200px;">Группа вк</th>
         @endif
         @if(in_array("from", $fields))
         <th>От кого</th>
