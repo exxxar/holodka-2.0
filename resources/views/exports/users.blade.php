@@ -69,13 +69,18 @@
                 $user = (object)$user;
             @endphp
             <tr>
-
                 <td>{{ $index }}</td>
                 @if(!is_null($user->name ?? null))
                     <td style="width: 200px;">{{ $user->name ?? '-' }}</td>
                 @endif
                 @if(!is_null($user->vk_user_link ?? null))
                     <td style="width: 200px;">{{ $user->vk_user_link ?? '-' }}</td>
+                @endif
+                @if(!is_null($user->vk_group_link ?? null))
+                    <td style="width: 200px;">{{ $user->vk_group_link ?? '-' }}</td>
+                @endif
+                @if(!is_null($user->age ?? null))
+                    <td>{{ $user->age ?? '-' }}</td>
                 @endif
                 @if(!is_null($user->city ?? null))
                     <td>{{ $user->city ?? '-' }}</td>
@@ -86,26 +91,20 @@
                 @if(!is_null($user->birthday ?? null))
                     <td>{{ $user->birthday ?? '-' }}</td>
                 @endif
-                @if(!is_null($user->age ?? null))
-                    <td>{{ $user->age ?? '-' }}</td>
-                @endif
-                @if(!is_null($user->vk_group_link ?? null))
-                    <td style="width: 200px;">{{ $user->vk_group_link ?? '-' }}</td>
-                @endif
                 @if(!is_null($user->from ?? null))
                     <td>{{ $user->from ?? '-' }}</td>
                 @endif
                 @if(!is_null($user->last_seen ?? null))
-                    <td style="width: 200px;">{{ !is_null($user->last_seen)?\Carbon\Carbon::parse($user->last_seen)->format("Y-m-d H:i:s"):'-' }}</td>
+                    <td style="width: 200px;">{{ !is_null($user->last_seen) ? \Carbon\Carbon::parse($user->last_seen)->format("Y-m-d H:i:s") : '-' }}</td>
                 @endif
                 @if(!is_null($user->common_count ?? null))
                     <td>{{ $user->common_count ?? 0 }}</td>
                 @endif
                 @if(!is_null($user->is_profile_closed ?? null))
-                    <td>{{ ($user->is_profile_closed ?? false) ? "Закрытый":"Открытый" }}</td>
+                    <td>{{ ($user->is_profile_closed ?? false) ? "Закрытый" : "Открытый" }}</td>
                 @endif
                 @if(!is_null($user->is_messages_closed ?? null))
-                    <td>{{ ($user->is_messages_closed ?? false) ? "Закрыты":"Открыты" }}</td>
+                    <td>{{ ($user->is_messages_closed ?? false) ? "Закрыты" : "Открыты" }}</td>
                 @endif
                 @if(!is_null($user->deactivated ?? null))
                     <td>{{ $user->deactivated ?? '-' }}</td>
