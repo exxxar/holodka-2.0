@@ -24,6 +24,9 @@
         @if(in_array("vk_group_link", $fields))
             <th style="width: 200px;">Группа вк</th>
         @endif
+        @if(in_array("status", $fields))
+            <th style="width: 200px;">Статус</th>
+        @endif
         @if(in_array("age", $fields))
             <th>Возраст</th>
         @endif
@@ -78,6 +81,29 @@
                 @endif
                 @if(!is_null($user->vk_group_link ?? null))
                     <td style="width: 200px;">{{ $user->vk_group_link ?? '-' }}</td>
+                @endif
+                @if(!is_null($user->status ?? null))
+                    <td style="width: 200px;">
+                        @switch($user->status)
+                            @case(0)
+                                <span>Только добавлен</span>
+                                @break
+                            @case(1)
+                                <span>Взят в обработку</span>
+                                @break
+                            @case(2)
+                                <span>Отказ</span>
+                                @break
+                            @case(3)
+                                <span>Сомневается</span>
+                                @break
+                            @case(4)
+                                <span>Успех</span>
+                                @break
+                            @default
+                                <span>Неизвестный статус</span>
+                        @endswitch
+                    </td>
                 @endif
                 @if(!is_null($user->age ?? null))
                     <td>{{ $user->age ?? '-' }}</td>
