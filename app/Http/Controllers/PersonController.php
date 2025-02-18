@@ -127,10 +127,6 @@ class PersonController extends Controller
                 ->where("active", true)
                 ->pluck("key")->toArray());
 
-            $fields = Collection::make($fields)
-                ->except("is_message_closed")
-                ->all();
-
             if (count($fields) > 0)
                 $persons = $persons
                     ->select($fields);
