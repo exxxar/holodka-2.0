@@ -57,19 +57,19 @@ import Pagination from "@/Components/Pagination.vue";
             <h6 class="mr-2">Тип профиля: </h6>
             <span class="badge m-0 cursor-pointer"
                   @click="changeMessageType(null)"
-                  v-bind:class="{'bg-primary':sort.filters.is_message_closed == null, 'bg-secondary text-white':sort.filters.is_message_closed != null}">
+                  v-bind:class="{'bg-primary':sort.filters.is_messages_closed == null, 'bg-secondary text-white':sort.filters.is_messages_closed != null}">
             Не учитывать тип профиля
         </span>,
 
             <span class="badge m-0 cursor-pointer"
                   @click="changeMessageType(0)"
-                  v-bind:class="{'bg-primary':sort.filters.is_message_closed === 0, 'bg-secondary text-white':sort.filters.is_message_closed !== 0}">
+                  v-bind:class="{'bg-primary':sort.filters.is_messages_closed === 0, 'bg-secondary text-white':sort.filters.is_messages_closed !== 0}">
             Открытый
         </span>,
 
             <span class="badge m-0 cursor-pointer"
                   @click="changeMessageType(1)"
-                  v-bind:class="{'bg-primary':sort.filters.is_message_closed === 1, 'bg-secondary text-white':sort.filters.is_message_closed !== 1}">
+                  v-bind:class="{'bg-primary':sort.filters.is_messages_closed === 1, 'bg-secondary text-white':sort.filters.is_messages_closed !== 1}">
             Закрытый
         </span>
 
@@ -558,7 +558,7 @@ export default {
                     statuses: [],
                     cities: [],
                     groups: [],
-                    is_message_closed: null, //0,1
+                    is_messages_closed: null, //0,1
                     age: {
                         from: null,
                         to: null,
@@ -654,7 +654,7 @@ export default {
 
                 {
                     title: "Профиль открыть",
-                    key: "is_message_closed",
+                    key: "is_messages_closed",
                     order: 0,
                     active: false,
                 },
@@ -706,7 +706,7 @@ export default {
                     common_count: 0,
                     home_town: null,
                     last_seen: null,
-                    is_message_closed: false,
+                    is_messages_closed: false,
                     is_messages_closed: false,
                     deactivated: false,
                     owner_id: null,
@@ -775,7 +775,7 @@ export default {
             })
         },
         changeMessageType(type) {
-            this.sort.filters.is_message_closed = type
+            this.sort.filters.is_messages_closed = type
         },
         loadAllGroups() {
 
@@ -843,7 +843,7 @@ export default {
             this.sort.filters.age.to = null
             this.sort.filters.cities = []
             this.sort.filters.statuses = []
-            this.sort.filters.is_message_closed = null
+            this.sort.filters.is_messages_closed = null
             this.search = null
             this.loadPersons(0)
         },

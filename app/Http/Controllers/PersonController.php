@@ -245,7 +245,7 @@ class PersonController extends Controller
 
         if (!is_null($filters)) {
 
-            $isMessageClosed = $filters["is_message_closed"] ?? null;
+            $isMessageClosed = $filters["is_messages_closed"] ?? null;
 
             $needEmptyCity = count(array_filter($filters["cities"] ?? [], function ($item) {
                     return $item === "Без города";

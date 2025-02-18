@@ -42,15 +42,15 @@
     "/build/assets/Dashboard-C08rSAyT.js"
   ],
   "resources/js/Components/Persons/PersonForm.vue": [
-    "/build/assets/PersonForm-B1q7Sqg_.js",
+    "/build/assets/PersonForm-DZ9cgiZX.js",
     "/build/assets/PersonForm-Co3JUmZX.css"
   ],
   "resources/js/Components/Persons/PersonTable.vue": [
-    "/build/assets/PersonForm-B1q7Sqg_.js",
+    "/build/assets/PersonForm-DZ9cgiZX.js",
     "/build/assets/PersonForm-Co3JUmZX.css"
   ],
   "resources/js/Components/Persons/PersonTable.vue?vue&type=style&index=0&lang.css": [
-    "/build/assets/PersonForm-B1q7Sqg_.js",
+    "/build/assets/PersonForm-DZ9cgiZX.js",
     "/build/assets/PersonForm-Co3JUmZX.css"
   ],
   "resources/js/Components/Persons/RequestVKForm.vue": [
@@ -96,7 +96,7 @@
     "/build/assets/Dashboard-C08rSAyT.js"
   ],
   "resources/js/Pages/Persons.vue": [
-    "/build/assets/Persons-D7Jc6Y_l.js"
+    "/build/assets/Persons-C3krt4Fj.js"
   ],
   "resources/js/Pages/Profile/Edit.vue": [
     "/build/assets/Edit-Px2BVH3E.js"
@@ -111,7 +111,7 @@
     "/build/assets/UpdateProfileInformationForm-BwLAAesb.js"
   ],
   "resources/js/Pages/Statistic.vue": [
-    "/build/assets/Statistic-D6ypvld0.js"
+    "/build/assets/Statistic-DdQ1VEdq.js"
   ],
   "resources/js/Pages/Welcome.vue": [
     "/build/assets/Welcome-Bgyz5c6y.js",

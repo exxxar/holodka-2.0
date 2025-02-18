@@ -15,7 +15,7 @@ const __default__ = {
           statuses: [],
           cities: [],
           groups: [],
-          is_message_closed: null,
+          is_messages_closed: null,
           //0,1
           age: {
             from: null,
@@ -111,7 +111,7 @@ const __default__ = {
         },
         {
           title: "Профиль открыть",
-          key: "is_message_closed",
+          key: "is_messages_closed",
           order: 0,
           active: false
         },
@@ -159,7 +159,7 @@ const __default__ = {
           common_count: 0,
           home_town: null,
           last_seen: null,
-          is_message_closed: false,
+          is_messages_closed: false,
           is_messages_closed: false,
           deactivated: false,
           owner_id: null,
@@ -220,7 +220,7 @@ const __default__ = {
       });
     },
     changeMessageType(type) {
-      this.sort.filters.is_message_closed = type;
+      this.sort.filters.is_messages_closed = type;
     },
     loadAllGroups() {
       this.loaded_groups = false;
@@ -282,7 +282,7 @@ const __default__ = {
       this.sort.filters.age.to = null;
       this.sort.filters.cities = [];
       this.sort.filters.statuses = [];
-      this.sort.filters.is_message_closed = null;
+      this.sort.filters.is_messages_closed = null;
       this.search = null;
       this.loadPersons(0);
     },
@@ -379,7 +379,7 @@ const _sfc_main$1 = /* @__PURE__ */ Object.assign(__default__, {
       } else {
         _push(`<!---->`);
       }
-      _push(`<div class="alert alert-light my-2 rounded-0"><div class="d-flex w-100 flex-wrap align-items-center"><h6 class="mr-2">Тип профиля: </h6><span class="${ssrRenderClass([{ "bg-primary": _ctx.sort.filters.is_message_closed == null, "bg-secondary text-white": _ctx.sort.filters.is_message_closed != null }, "badge m-0 cursor-pointer"])}"> Не учитывать тип профиля </span>, <span class="${ssrRenderClass([{ "bg-primary": _ctx.sort.filters.is_message_closed === 0, "bg-secondary text-white": _ctx.sort.filters.is_message_closed !== 0 }, "badge m-0 cursor-pointer"])}"> Открытый </span>, <span class="${ssrRenderClass([{ "bg-primary": _ctx.sort.filters.is_message_closed === 1, "bg-secondary text-white": _ctx.sort.filters.is_message_closed !== 1 }, "badge m-0 cursor-pointer"])}"> Закрытый </span></div></div>`);
+      _push(`<div class="alert alert-light my-2 rounded-0"><div class="d-flex w-100 flex-wrap align-items-center"><h6 class="mr-2">Тип профиля: </h6><span class="${ssrRenderClass([{ "bg-primary": _ctx.sort.filters.is_messages_closed == null, "bg-secondary text-white": _ctx.sort.filters.is_messages_closed != null }, "badge m-0 cursor-pointer"])}"> Не учитывать тип профиля </span>, <span class="${ssrRenderClass([{ "bg-primary": _ctx.sort.filters.is_messages_closed === 0, "bg-secondary text-white": _ctx.sort.filters.is_messages_closed !== 0 }, "badge m-0 cursor-pointer"])}"> Открытый </span>, <span class="${ssrRenderClass([{ "bg-primary": _ctx.sort.filters.is_messages_closed === 1, "bg-secondary text-white": _ctx.sort.filters.is_messages_closed !== 1 }, "badge m-0 cursor-pointer"])}"> Закрытый </span></div></div>`);
       if (_ctx.loaded_groups) {
         _push(`<div class="alert alert-light my-2 rounded-0"><div class="d-flex w-100 flex-wrap align-items-center"><h6 class="mr-2">Фильтры групп: </h6><span class="${ssrRenderClass([{ "bg-primary": _ctx.sort.filters.groups.indexOf("Не указана") !== -1, "bg-secondary text-white": _ctx.sort.filters.groups.indexOf("Не указана") === -1 }, "badge m-0 cursor-pointer"])}"> Не указана </span>, <!--[-->`);
         ssrRenderList(_ctx.selectedGroups, (item, index) => {
