@@ -122,9 +122,14 @@ class PersonController extends Controller
             ->orderBy($order, $direction);
 
         if (!is_null($fields)) {
+
             $fields = array_values(Collection::make($fields)
                 ->where("active", true)
                 ->pluck("key")->toArray());
+
+            $fields = Collection::make($fields)
+                ->except("is_message_closed")
+                ->all();
 
             if (count($fields) > 0)
                 $persons = $persons
