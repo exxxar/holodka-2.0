@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 use Inertia\Inertia;
@@ -126,6 +127,10 @@ class PersonController extends Controller
             $fields = array_values(Collection::make($fields)
                 ->where("active", true)
                 ->pluck("key")->toArray());
+
+            if (in_array("is_message_closed", $fields)) {
+                Log::info("error=>" . print_r($fields, true));
+            }
 
             if (count($fields) > 0)
                 $persons = $persons
