@@ -263,10 +263,16 @@ class VKBusinessLogic
 
             $age = 0;
             if (!is_null($item->bdate ?? null)) {
-                if (strlen($item->bdate) > 5)
-                    $age = Carbon::now()->year - Carbon::parse($item->bdate)->year;
-            }
+                if (strlen($item->bdate) > 5) {
+                    $birthDate = Carbon::parse($item->bdate);
+                    $age = Carbon::now()->year - $birthDate->year;
 
+                    // Если день рождения в этом году еще не наступил, уменьшаем возраст на 1
+                    if (Carbon::now()->format('md') < $birthDate->format('md')) {
+                        $age--;
+                    }
+                }
+            }
 
             $tmp = [
                 "name" => "$item->first_name $item->last_name",
