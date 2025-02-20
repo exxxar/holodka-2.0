@@ -59,89 +59,7 @@ class PersonController extends Controller
 
     public function excelDownload(Request $request)
     {
-
-        $search = $request->search ?? null;
-        $order = $request->order ?? "id";
-        $direction = $request->direction ?? "asc";
-
-        $filters = $request->filters ?? null;
-
-        $fields = $request->fields ?? null;
-
-
-        $persons = Person::query()
-            ->where("owner_id", Auth::user()->id);
-
-        if (!is_null($search))
-            $persons = $persons
-                ->where("name", 'like', "%$search%")
-                ->orWhere("city", 'like', "%$search%");
-
-        if (!is_null($filters)) {
-
-            $needEmptyCity = count(array_filter($filters["cities"] ?? [], function ($item) {
-                    return $item === "Без города";
-                })) > 0;
-
-
-            if (count($filters["cities"] ?? []) > 0) {
-                $persons = $persons
-                    ->whereIn("city", $filters["cities"] ?? []);
-
-                if ($needEmptyCity)
-                    $persons = $persons
-                        ->orWhereNull("city");
-
-            }
-
-
-            if (count($filters["statuses"] ?? []) > 0)
-                $persons = $persons
-                    ->whereIn("status", $filters["statuses"] ?? []);
-
-
-            if (count($filters["age"] ?? []) > 0) {
-                $start = $filters["age"]["from"] ?? null;
-                $end = $filters["age"]["to"] ?? null;
-
-                if (is_null($start) && !is_null($end))
-                    $persons = $persons
-                        ->where("age", "<=", $end);
-
-                if (!is_null($start) && is_null($end))
-                    $persons = $persons
-                        ->where("age", ">=", $start);
-
-                if (!is_null($start) && !is_null($end))
-                    $persons = $persons
-                        ->whereBetween("age", [$start, $end]);
-
-            }
-        }
-
-        $persons = $persons
-            ->orderBy($order, $direction);
-
-        if (!is_null($fields)) {
-
-            $fields = array_values(Collection::make($fields)
-                ->where("active", true)
-                ->pluck("key")->toArray());
-
-            if (in_array("is_message_closed", $fields)) {
-                Log::info("error=>" . print_r($fields, true));
-            }
-
-            if (count($fields) > 0)
-                $persons = $persons
-                    ->select($fields);
-        }
-
-        $persons = $persons
-            ->get();
-
-
-        return Excel::download(new \App\Exports\UsersExport($fields, $persons->toArray()), 'result-file.xlsx');
+        return $this->personsFilter($request->all(), true);
     }
 
     public function cities(Request $request)
@@ -223,100 +141,94 @@ class PersonController extends Controller
         return response()->noContent();
     }
 
-    public function getSelfClientList(Request $request): PersonCollection
+    protected function personsFilter(array $data, bool $isDownload = false)
     {
 
-
-        $search = $request->search ?? null;
-        $order = $request->order ?? "id";
-        $direction = $request->direction ?? "asc";
-
-
-        $filters = $request->filters ?? null;
-
-        $size = $size ?? config('app.results_per_page');
+        $search = $data["search"] ?? null;
+        $order = $data["order"] ?? "id";
+        $direction = $data["direction"] ?? "asc";
+        $filters = $data["filters"] ?? null;
+        $fields = $data["fields"] ?? null;
+        $size = $data["size"] ?? config('app.results_per_page');
 
         $user = User::query()->find(Auth::user()->id);
-
 
         $persons = Person::query()
             ->where("owner_id", $user->id)
             ->where("from", env("PRODUCT_KEY"));
 
-
-        if (!is_null($search))
+        if (!is_null($search)) {
             $persons = $persons
-                ->where("name", 'like', "%$search%")
-                ->orWhere("city", 'like', "%$search%");
+                ->where(function ($query) use ($search) {
+                    $query->where("name", 'like', "%$search%")
+                        ->orWhere("city", 'like', "%$search%");
+                });
+        }
 
         if (!is_null($filters)) {
-
             $isMessageClosed = $filters["is_messages_closed"] ?? null;
+            $needEmptyCity = in_array("Без города", $filters["cities"] ?? []);
+            $needEmptyGroup = in_array("Не указана", $filters["groups"] ?? []);
 
-            $needEmptyCity = count(array_filter($filters["cities"] ?? [], function ($item) {
-                    return $item === "Без города";
-                })) > 0;
-
-            $needEmptyGroup = count(array_filter($filters["groups"] ?? [], function ($item) {
-                    return $item === "Не указана";
-                })) > 0;
-
-            if (count($filters["groups"] ?? []) > 0) {
-                $persons = $persons
-                    ->whereIn("vk_group_link", $filters["groups"] ?? []);
-
-                if ($needEmptyGroup)
-                    $persons = $persons
-                        ->orWhereNull("vk_group_link");
-
+            if (!empty($filters["groups"])) {
+                $persons = $persons->whereIn("vk_group_link", $filters["groups"]);
+                if ($needEmptyGroup) {
+                    $persons = $persons->orWhereNull("vk_group_link");
+                }
             }
 
             if (!is_null($isMessageClosed)) {
-                $persons = $persons
-                    ->where("is_messages_closed", $isMessageClosed);
+                $persons = $persons->where("is_messages_closed", $isMessageClosed);
             }
 
-
-            if (count($filters["cities"] ?? []) > 0) {
-                $persons = $persons
-                    ->whereIn("city", $filters["cities"] ?? []);
-
-                if ($needEmptyCity)
-                    $persons = $persons
-                        ->orWhereNull("city");
-
+            if (!empty($filters["cities"])) {
+                $persons = $persons->whereIn("city", $filters["cities"]);
+                if ($needEmptyCity) {
+                    $persons = $persons->orWhereNull("city");
+                }
             }
 
+            if (!empty($filters["statuses"])) {
+                $persons = $persons->whereIn("status", $filters["statuses"]);
+            }
 
-            if (count($filters["statuses"] ?? []) > 0)
-                $persons = $persons
-                    ->whereIn("status", $filters["statuses"] ?? []);
-
-
-            if (count($filters["age"] ?? []) > 0) {
+            if (!empty($filters["age"])) {
                 $start = $filters["age"]["from"] ?? null;
                 $end = $filters["age"]["to"] ?? null;
 
-                if (is_null($start) && !is_null($end))
-                    $persons = $persons
-                        ->where("age", "<=", $end);
-
-                if (!is_null($start) && is_null($end))
-                    $persons = $persons
-                        ->where("age", ">=", $start);
-
-                if (!is_null($start) && !is_null($end))
-                    $persons = $persons
-                        ->whereBetween("age", [$start, $end]);
-
+                if (!is_null($start) && !is_null($end)) {
+                    $persons = $persons->whereBetween("age", [$start, $end]);
+                } elseif (!is_null($start)) {
+                    $persons = $persons->where("age", ">=", $start);
+                } elseif (!is_null($end)) {
+                    $persons = $persons->where("age", "<=", $end);
+                }
             }
         }
 
-        $persons = $persons
-            ->orderBy($order, $direction)
-            ->paginate($size);
+        $persons = $persons->orderBy($order, $direction);
 
-        return new PersonCollection($persons);
+        if (!is_null($fields)) {
+            $fields = array_values(
+                Collection::make($fields)->where("active", true)->pluck("key")->toArray()
+            );
+
+            if (count($fields) > 0) {
+                $persons = $persons->select($fields);
+            }
+        }
+
+        if ($isDownload) {
+            $persons = $persons->get();
+            return Excel::download(new \App\Exports\UsersExport($fields, $persons->toArray()), 'result-file.xlsx');
+        }
+
+        return new PersonCollection($persons->paginate($size));
+    }
+
+    public function getSelfClientList(Request $request)
+    {
+        return $this->personsFilter($request->all());
     }
 
 
