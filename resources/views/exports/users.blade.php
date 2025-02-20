@@ -13,8 +13,10 @@
 <table>
     <thead>
     <tr>
-        <th>#</th>
         @if(in_array("id", $fields))
+        <th>#</th>
+        @endif
+        @if(in_array("name", $fields))
         <th style="width: 200px;">Ф.И.О.</th>
         @endif
 
@@ -72,17 +74,19 @@
                 $user = (object)$user;
             @endphp
             <tr>
-                <td>{{ $index }}</td>
-                @if(!is_null($user->name ?? null))
+                @if(in_array("id", $fields))
+                    <td>{{ $index }}</td>
+                @endif
+                @if(in_array("name", $fields))
                     <td style="width: 200px;">{{ $user->name ?? '-' }}</td>
                 @endif
-                @if(!is_null($user->vk_user_link ?? null))
+                @if(in_array("vk_user_link", $fields))
                     <td style="width: 200px;">{{ $user->vk_user_link ?? '-' }}</td>
                 @endif
-                @if(!is_null($user->vk_group_link ?? null))
+                @if(in_array("vk_group_link", $fields))
                     <td style="width: 200px;">{{ $user->vk_group_link ?? '-' }}</td>
                 @endif
-                @if(!is_null($user->status ?? null))
+                @if(in_array("status", $fields))
                     <td style="width: 200px;">
                         @switch($user->status)
                             @case(0)
@@ -105,37 +109,38 @@
                         @endswitch
                     </td>
                 @endif
-                @if(!is_null($user->age ?? null))
+                @if(in_array("age", $fields))
                     <td>{{ $user->age ?? '-' }}</td>
                 @endif
-                @if(!is_null($user->city ?? null))
+                @if(in_array("city", $fields))
                     <td>{{ $user->city ?? '-' }}</td>
                 @endif
-                @if(!is_null($user->home_town ?? null))
+                @if(in_array("home_town", $fields))
                     <td style="width: 200px;">{{ $user->home_town ?? '-' }}</td>
                 @endif
-                @if(!is_null($user->birthday ?? null))
+                @if(in_array("birthday", $fields))
                     <td>{{ $user->birthday ?? '-' }}</td>
                 @endif
-                @if(!is_null($user->from ?? null))
+                @if(in_array("from", $fields))
                     <td>{{ $user->from ?? '-' }}</td>
                 @endif
-                @if(!is_null($user->last_seen ?? null))
+                @if(in_array("last_seen", $fields))
                     <td style="width: 200px;">{{ !is_null($user->last_seen) ? \Carbon\Carbon::parse($user->last_seen)->format("Y-m-d H:i:s") : '-' }}</td>
                 @endif
-                @if(!is_null($user->common_count ?? null))
+                @if(in_array("common_count", $fields))
                     <td>{{ $user->common_count ?? 0 }}</td>
                 @endif
-                @if(!is_null($user->is_profile_closed ?? null))
+                @if(in_array("is_profile_closed", $fields))
                     <td>{{ ($user->is_profile_closed ?? false) ? "Закрытый" : "Открытый" }}</td>
                 @endif
-                @if(!is_null($user->is_messages_closed ?? null))
+                @if(in_array("is_messages_closed", $fields))
                     <td>{{ ($user->is_messages_closed ?? false) ? "Закрыты" : "Открыты" }}</td>
                 @endif
-                @if(!is_null($user->deactivated ?? null))
+                @if(in_array("deactivated", $fields))
                     <td>{{ $user->deactivated ?? '-' }}</td>
                 @endif
             </tr>
+
             @php
                 $index++;
             @endphp
