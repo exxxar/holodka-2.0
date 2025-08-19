@@ -14,6 +14,9 @@ import Pagination from "@/Components/Pagination.vue";
                     <th scope="col">Максимальный охват</th>
                     <th scope="col">Собрано пользователей</th>
                     <th scope="col">Статус</th>
+                    <th scope="col">Время выполнения</th>
+                    <th scope="col">Вариант сбора</th>
+                    <th scope="col">Дата завершения</th>
                     <th scope="col">Дата добавления</th>
                     <th scope="col">Действие</th>
                 </tr>
@@ -22,12 +25,26 @@ import Pagination from "@/Components/Pagination.vue";
                 <tr v-for="(item, index) in jobs">
                     <th scope="row">{{index+1}}</th>
                     <td>{{item.group}}</td>
-                    <td>{{item.max_post_count}}</td>
+                    <td>{{item.is_only_active ? item.max_post_count : 'не ограничено'}}</td>
                     <td>{{item.result_count}}</td>
                     <td>
-                        <span v-if="item.completed_at==null">В обработке</span>
-                        <span v-else>Завершено</span>
+                        <span v-if="item.status===0">Новый</span>
+                        <span v-if="item.status===1">В обработке</span>
+                        <span v-if="item.status===2">Завершено</span>
+                        <span v-if="item.status===3">Ошибка</span>
+
                     </td>
+                    <td>
+                        <span v-if="item.time_execute">
+                            {{item.time_execute}} мин.
+                        </span>
+                        <span v-else>Не рассчитано</span>
+                    </td>
+                    <td>
+                        <span v-if="item.is_only_active">Только активные</span>
+                        <span v-else>Все</span>
+                    </td>
+                    <td>{{item.completed_at || ''}}</td>
                     <td>{{item.created_at}}</td>
                     <td>
                         <button

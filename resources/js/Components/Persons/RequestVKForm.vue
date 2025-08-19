@@ -33,7 +33,22 @@
                 v-if="link"
                 :href="link">Получить токен</a>
         </div>
+        <div  class="d-flex w-100 justify-center">
+            <div class="form-check form-switch">
+                <input
+                    v-model="form.is_only_active"
+                    class="form-check-input" type="checkbox" role="switch" id="is-only-active-users">
+                <label class="form-check-label" for="is-only-active-users">
+                    Собирать только активных пользователей:
+                    <span v-bind:class="{'fw-bold text-primary':form.is_only_active}">вкл</span> /
+                    <span  v-bind:class="{'fw-bold text-primary':!form.is_only_active}">выкл</span>
+                </label>
+            </div>
+
+        </div>
         <div class="d-flex w-100 justify-center">
+
+
             <button
                 :disabled="!user.is_active_token"
                 class="btn btn-primary rounded-0">Добавить задачу
@@ -57,6 +72,7 @@ export default {
         return {
             link: null,
             form: {
+                is_only_active:false,
                 group: null,
                 max_post_count: 30,
             }

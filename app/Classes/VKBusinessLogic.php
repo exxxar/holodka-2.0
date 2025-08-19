@@ -3,8 +3,10 @@
 namespace App\Classes;
 
 use App\Models\User;
+use App\Models\UserJob;
 use Carbon\Carbon;
 
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -41,7 +43,7 @@ class VKBusinessLogic
     {
         $this->ownerId = $id;
 
-        $user =  User::query()->find($id);
+        $user = User::query()->find($id);
 
         $this->company = $user->company ?? env("PRODUCT_KEY");
     }
@@ -121,6 +123,7 @@ class VKBusinessLogic
         return $vk->groups()
             ->getMembers($this->accessToken, [
                 "group_id" => $groupId,
+                'sort' => 'id_desc',
                 "offset" => $offset,
                 "count" => $count,
                 "fields" => "city,home_town,deactivated,common_count,bdate,can_write_private_message,is_closed,last_seen,photo_max_orig,universities,can_see_all_posts"
@@ -227,6 +230,7 @@ class VKBusinessLogic
 
     }
 
+
     public function getUsers(string $ids, $version = '5.130'): mixed
     {
 
@@ -289,37 +293,102 @@ class VKBusinessLogic
                 "is_profile_closed" => !($item->is_closed ?? true),
                 "is_messages_closed" => !($item->can_write_private_message ?? true),
                 "deactivated" => $item->deactivated ?? null,
-                "owner_id" =>  $this->ownerId,
+                "owner_id" => $this->ownerId,
             ];
 
             $person = \App\Models\Person::query()
                 ->where("vk_id", $item->id)
-                ->where("from",  env("PRODUCT_KEY"))
+                ->where("from", env("PRODUCT_KEY"))
                 ->first();
 
             if (is_null($person)) {
                 \App\Models\Person::query()
                     ->create($tmp);
 
-                Log::info($item->id." ".$tmp["name"]);
+              //  Log::info($item->id . " " . $tmp["name"]);
                 $users[] = (object)$tmp;
             } /*else
                 \App\Models\Person::query()
                     ->update($tmp);*/
 
-           // $users[] = (object)$tmp;
+            // $users[] = (object)$tmp;
         }
 
         return $users;
     }
 
+    public function handlerFull($group, $jobId)
+    {
+        $groupId = $this->getIdByName($group)["object_id"] ?? null;
+        sleep(1);
+
+        $j = UserJob::query()
+            ->find($jobId);
+
+        $step = 200;
+        $maxUserLimit = 200000;
+        $offset = 0;
+        $userIds = [];
+        do {
+            $result = $this->getGroupMembers($groupId, $offset, $step);
+            sleep(1);
+            $count = $result["count"];
+
+            if ($offset == 0 && !is_null($j)) {
+                $j->time_execute = round((($count / 100) / 60) * 3) + 1;
+                $j->save();
+            }
+
+            $userIds = [...$userIds, ...$result["items"]];
+            $offset += $step;
+
+
+            if ($offset > $count || $offset > $maxUserLimit)
+                break;
+
+            //  Log::info("offset=>$offset count=$count");
+        } while (true);
+
+        $userIds = Collection::make($userIds)
+            ->pluck("id")->toArray();
+
+        $sum = 0;
+
+        // Log::info("IDS=>".count($userIds));
+        if (count($userIds) > 200) {
+
+            for ($offset = 0; $offset < count($userIds); $offset += 200) {
+                $copyUserIds = array_slice($userIds, $offset, 200);
+                $users = $this->getUsers(implode(",", $copyUserIds));
+                sleep(1);
+                $sum += count($this->prepareUsers($users, $group));
+
+                if (!is_null($j)){
+                    $j->result_count = $sum;
+                    $j->save();
+                }
+            }
+
+        } else {
+            $users = $this->getUsers(implode(",", $userIds));
+            $sum += count($this->prepareUsers($users, $group));
+
+            if (!is_null($j)){
+                $j->result_count = $sum;
+                $j->save();
+            }
+        }
+
+        return $sum;
+    }
+
     public function handler($group, $maxPostCount = 10)
     {
-    /*    $state = json_decode(base64_decode($state));
-        $group = $state->group ?? "profcom_dongu";
+        /*    $state = json_decode(base64_decode($state));
+            $group = $state->group ?? "profcom_dongu";
 
 
-        $maxPostCount = $state->max_post_count ?? 100;*/
+            $maxPostCount = $state->max_post_count ?? 100;*/
 
         $groupId = $this->getIdByName($group)["object_id"] ?? null;
         sleep(1);
@@ -348,8 +417,8 @@ class VKBusinessLogic
         $userIds = [];
         $maxLikes = 100;
         foreach ($postIds as $postId) {
-         /*   $time = random_int(1, 3);
-            sleep($time);*/
+            /*   $time = random_int(1, 3);
+               sleep($time);*/
 
             sleep(1);
             $result = $this->getLikes("-" . $groupId, $postId, "post", 0, $maxLikes);
@@ -360,30 +429,35 @@ class VKBusinessLogic
 
             $likesCount = $result["count"];
 
-                    if ($likesCount > 100)
-                        for ($offset = 100; $offset < min($count, $maxLikes); $offset += 100) {
-                            sleep(1);
+            if ($likesCount > 100)
+                for ($offset = 100; $offset < min($count, $maxLikes); $offset += 100) {
+                    sleep(1);
 
-                            $result  = $this->getLikes("-" . $groupId, $postId, "post", $offset, $maxLikes);
+                    $result = $this->getLikes("-" . $groupId, $postId, "post", $offset, $maxLikes);
 
-                            $diff = array_diff($userIds, array_values($result["items"]));
-                            $userIds = [...$userIds, ...$diff];
-                        }
+                    $diff = array_diff($userIds, array_values($result["items"]));
+                    $userIds = [...$userIds, ...$diff];
+                }
         }
 
 
-        $users = [];
+        $sum = 0;
+
         if (count($userIds) > 200) {
 
             for ($offset = 0; $offset < count($userIds); $offset += 200) {
                 $copyUserIds = array_slice($userIds, $offset, 200);
-                $users = [...$users, ...$this->getUsers(implode(",", $copyUserIds))];
+                $users = $this->getUsers(implode(",", $copyUserIds));
+                $sum += count($this->prepareUsers($users, $group));
             }
 
-        } else
+        } else {
             $users = $this->getUsers(implode(",", $userIds));
+            $sum += count($this->prepareUsers($users, $group));
+        }
 
-        return count($this->prepareUsers($users, $group));
+
+        return $sum;
 
     }
 }

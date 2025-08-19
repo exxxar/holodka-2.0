@@ -8,8 +8,10 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Symfony\Component\Process\Process;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
@@ -30,13 +32,12 @@ use VK\OAuth\VKOAuth;
 |
 */
 
-Route::get('/pusher', function(){
-   // event(new MyEvent('hello world', 2, "test", 2));
+Route::get('/job-run', function () {
+    Artisan::call('app:run-gather-data');
 
-    $data = 'Sample data';
-
-    ParseVKJob::dispatch($data)->delay(now()->addSeconds(10))
-        ->onQueue('vk');
+   // $process = new Process(['php', 'artisan', 'app:run-gather-data','--force']);
+   // $process->run(); // не блокирует основной поток
+    return "ok";
 });
 
 Route::get('/redis', function () {
@@ -160,22 +161,29 @@ Route::middleware('auth')->group(function () {
         $user = User::query()->find(Auth::user()->id);
 
         $group = $request->group;
+        $isOnlyActive = ($request->is_only_active ?? false) == "true";
         $max = env("POST_LIMIT") ?? 10;
 
         $job = \App\Models\UserJob::query()->create([
             "group" => $group,
             "user_id" => $user->id,
+            'is_only_active' =>$isOnlyActive,
             "max_post_count" => $max,
             "result_count" => 0,
+            'status'=>\App\Enums\UserJobStatusEnum::New->value,
+            'token'=>$user->vk_access_token,
             "completed_at" => null,
         ]);
 
-        ParseVKJob::dispatch($group,
+        ParseVKJob::dispatch();
+
+        return response()->noContent();
+      /*  ParseVKJob::dispatch($group,
             $max,
             $job->id,
             $user->id,
             $user->vk_access_token)
-            ->delay(now()->addSeconds(5));
+            ->delay(now()->addSeconds(5));*/
     });
 
     Route::post("/store-company", function (\Illuminate\Http\Request $request) {
@@ -187,7 +195,7 @@ Route::middleware('auth')->group(function () {
 
         $user->company = $request->company ?? null;
         $user->save();
-      return response()->noContent();
+        return response()->noContent();
     });
 
 

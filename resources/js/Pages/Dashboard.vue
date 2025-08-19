@@ -37,36 +37,36 @@ import JobsTable from "@/Components/Persons/JobsTable.vue";
                                             <p v-if="user.vk_token_expired_at!=null">{{ user.vk_token_expired_at }}</p>
                                             <p v-else>Тоукен не задан</p>
                                         </li>
-<!--                                        <li class="list-group-item">
-                                           <h6 class="my-2">Ключ компании</h6>
+                                        <!--                                        <li class="list-group-item">
+                                                                                   <h6 class="my-2">Ключ компании</h6>
 
-                                            <div class="alert alert-info rounded-0" v-if="!company||company.length<6">
-                                                Внимание! Вы должны указать текстовый ключ вашей компании (команды). Это может быть или специально сгенерированный ключ или произвольный ключ длиной от 6 (сейчас {{(company||'').length}}) символов.
-                                            </div>
+                                                                                    <div class="alert alert-info rounded-0" v-if="!company||company.length<6">
+                                                                                        Внимание! Вы должны указать текстовый ключ вашей компании (команды). Это может быть или специально сгенерированный ключ или произвольный ключ длиной от 6 (сейчас {{(company||'').length}}) символов.
+                                                                                    </div>
 
-                                            <div class="input-group ">
-                                                <div class="form-floating">
-                                                    <input type="text"
-                                                           minlength="6"
-                                                           v-model="company"
-                                                           class="form-control">
-                                                    <label for="">Ключ компании</label>
-                                                </div>
-                                                <span
-                                                    v-if="user.company"
-                                                    @click="storeCompany"
-                                                    class="input-group-text rounded-0 bg-primary border-black">
-                                                    <button class="btn text-white"><i class="bi bi-arrow-repeat"></i></button>
-                                                </span>
-                                            </div>
+                                                                                    <div class="input-group ">
+                                                                                        <div class="form-floating">
+                                                                                            <input type="text"
+                                                                                                   minlength="6"
+                                                                                                   v-model="company"
+                                                                                                   class="form-control">
+                                                                                            <label for="">Ключ компании</label>
+                                                                                        </div>
+                                                                                        <span
+                                                                                            v-if="user.company"
+                                                                                            @click="storeCompany"
+                                                                                            class="input-group-text rounded-0 bg-primary border-black">
+                                                                                            <button class="btn text-white"><i class="bi bi-arrow-repeat"></i></button>
+                                                                                        </span>
+                                                                                    </div>
 
-                                            <button
-                                                @click="storeCompany"
-                                                v-if="!user.company"
-                                                :disabled="!company || (company||'').length<6"
-                                                class="btn btn-primary rounded-0 p-3 my-2 w-100">Сохранить</button>
+                                                                                    <button
+                                                                                        @click="storeCompany"
+                                                                                        v-if="!user.company"
+                                                                                        :disabled="!company || (company||'').length<6"
+                                                                                        class="btn btn-primary rounded-0 p-3 my-2 w-100">Сохранить</button>
 
-                                        </li>-->
+                                                                                </li>-->
                                     </ul>
 
                                     <!--                                    <button
@@ -76,7 +76,6 @@ import JobsTable from "@/Components/Persons/JobsTable.vue";
                                                                             class="btn btn-outline-primary w-100 mt-2">Заполнить автоматически профиль в вк</button>-->
 
 
-
                                     <a
                                         class="btn btn-success mt-2 w-100 rounded-0 p-3"
                                         v-if="link&&user.company"
@@ -84,7 +83,7 @@ import JobsTable from "@/Components/Persons/JobsTable.vue";
 
                                     <hr class="my-2">
                                     <div class="alert alert-success mb-2 rounded-0" v-for="message in messages">
-                                        Собраны данные по группе {{message.group}} (#{{message.jobId}})
+                                        Собраны данные по группе {{ message.group }} (#{{ message.jobId }})
                                     </div>
                                 </div>
                             </div>
@@ -111,8 +110,8 @@ export default {
     data() {
         return {
             link: null,
-            company:null,
-            messages:[]
+            company: null,
+            messages: []
         }
     },
 
@@ -123,13 +122,16 @@ export default {
 
         let channel = pusher.subscribe('my-channel');
         channel.bind('my-event', (data) => {
-            if (data.userId === this.user.id)
-            {
-               this.messages.push(data)
+            if (data.userId === this.user.id) {
+                this.messages.push(data)
+
+                setTimeout(() => {
+                    window.location.reload()
+                }, 4000)
 
                 this.$notify({
                     title: 'Внимание!',
-                    text: 'Ваше задание #'+data.jobId+" успешно выполнено!",
+                    text: 'Ваше задание #' + data.jobId + " успешно выполнено!",
                     type: 'success'
                 })
             }
@@ -151,7 +153,7 @@ export default {
 
                 })
         },
-        storeCompany(){
+        storeCompany() {
             this.$store.dispatch("storeCompany", {
                 company: this.company
             })

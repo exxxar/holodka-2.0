@@ -1,5 +1,5 @@
 import { mergeProps, useSSRContext, unref, withCtx, createVNode, openBlock, createBlock, toDisplayString, createCommentVNode, Fragment, renderList } from "vue";
-import { ssrRenderAttrs, ssrRenderAttr, ssrIncludeBooleanAttr, ssrRenderList, ssrInterpolate, ssrRenderComponent } from "vue/server-renderer";
+import { ssrRenderAttrs, ssrRenderAttr, ssrIncludeBooleanAttr, ssrLooseContain, ssrRenderClass, ssrRenderList, ssrInterpolate, ssrRenderComponent } from "vue/server-renderer";
 import { _ as _sfc_main$3 } from "./AuthenticatedLayout-B1xft-Vz.js";
 import { Head } from "@inertiajs/vue3";
 import { _ as _export_sfc } from "./_plugin-vue_export-helper-1tPrXgE0.js";
@@ -11,6 +11,7 @@ const _sfc_main$2 = {
     return {
       link: null,
       form: {
+        is_only_active: false,
         group: null,
         max_post_count: 30
       }
@@ -62,7 +63,7 @@ function _sfc_ssrRender(_ctx, _push, _parent, _attrs, $props, $setup, $data, $op
   } else {
     _push(`<!---->`);
   }
-  _push(`<div class="d-flex w-100 justify-center"><button${ssrIncludeBooleanAttr(!$options.user.is_active_token) ? " disabled" : ""} class="btn btn-primary rounded-0">Добавить задачу </button></div></form>`);
+  _push(`<div class="d-flex w-100 justify-center"><div class="form-check form-switch"><input${ssrIncludeBooleanAttr(Array.isArray($data.form.is_only_active) ? ssrLooseContain($data.form.is_only_active, null) : $data.form.is_only_active) ? " checked" : ""} class="form-check-input" type="checkbox" role="switch" id="is-only-active-users"><label class="form-check-label" for="is-only-active-users"> Собирать только активных пользователей: <span class="${ssrRenderClass({ "fw-bold text-primary": $data.form.is_only_active })}">вкл</span> / <span class="${ssrRenderClass({ "fw-bold text-primary": !$data.form.is_only_active })}">выкл</span></label></div></div><div class="d-flex w-100 justify-center"><button${ssrIncludeBooleanAttr(!$options.user.is_active_token) ? " disabled" : ""} class="btn btn-primary rounded-0">Добавить задачу </button></div></form>`);
 }
 const _sfc_setup$2 = _sfc_main$2.setup;
 _sfc_main$2.setup = (props, ctx) => {
@@ -119,15 +120,42 @@ const _sfc_main$1 = /* @__PURE__ */ Object.assign(__default__$1, {
     return (_ctx, _push, _parent, _attrs) => {
       _push(`<!--[-->`);
       if (_ctx.jobs.length > 0) {
-        _push(`<div class="row"><div class="col-12"><table class="table"><thead><tr><th scope="col">#</th><th scope="col">Группа</th><th scope="col">Максимальный охват</th><th scope="col">Собрано пользователей</th><th scope="col">Статус</th><th scope="col">Дата добавления</th><th scope="col">Действие</th></tr></thead><tbody><!--[-->`);
+        _push(`<div class="row"><div class="col-12"><table class="table"><thead><tr><th scope="col">#</th><th scope="col">Группа</th><th scope="col">Максимальный охват</th><th scope="col">Собрано пользователей</th><th scope="col">Статус</th><th scope="col">Время выполнения</th><th scope="col">Вариант сбора</th><th scope="col">Дата завершения</th><th scope="col">Дата добавления</th><th scope="col">Действие</th></tr></thead><tbody><!--[-->`);
         ssrRenderList(_ctx.jobs, (item, index) => {
-          _push(`<tr><th scope="row">${ssrInterpolate(index + 1)}</th><td>${ssrInterpolate(item.group)}</td><td>${ssrInterpolate(item.max_post_count)}</td><td>${ssrInterpolate(item.result_count)}</td><td>`);
-          if (item.completed_at == null) {
+          _push(`<tr><th scope="row">${ssrInterpolate(index + 1)}</th><td>${ssrInterpolate(item.group)}</td><td>${ssrInterpolate(item.is_only_active ? item.max_post_count : "не ограничено")}</td><td>${ssrInterpolate(item.result_count)}</td><td>`);
+          if (item.status === 0) {
+            _push(`<span>Новый</span>`);
+          } else {
+            _push(`<!---->`);
+          }
+          if (item.status === 1) {
             _push(`<span>В обработке</span>`);
           } else {
-            _push(`<span>Завершено</span>`);
+            _push(`<!---->`);
           }
-          _push(`</td><td>${ssrInterpolate(item.created_at)}</td><td><button class="btn btn-danger">Удалить</button></td></tr>`);
+          if (item.status === 2) {
+            _push(`<span>Завершено</span>`);
+          } else {
+            _push(`<!---->`);
+          }
+          if (item.status === 3) {
+            _push(`<span>Ошибка</span>`);
+          } else {
+            _push(`<!---->`);
+          }
+          _push(`</td><td>`);
+          if (item.time_execute) {
+            _push(`<span>${ssrInterpolate(item.time_execute)} мин. </span>`);
+          } else {
+            _push(`<span>Не рассчитано</span>`);
+          }
+          _push(`</td><td>`);
+          if (item.is_only_active) {
+            _push(`<span>Только активные</span>`);
+          } else {
+            _push(`<span>Все</span>`);
+          }
+          _push(`</td><td>${ssrInterpolate(item.completed_at || "")}</td><td>${ssrInterpolate(item.created_at)}</td><td><button class="btn btn-danger">Удалить</button></td></tr>`);
         });
         _push(`<!--]--></tbody></table></div></div>`);
       } else {
@@ -172,6 +200,9 @@ const __default__ = {
     channel.bind("my-event", (data) => {
       if (data.userId === this.user.id) {
         this.messages.push(data);
+        setTimeout(() => {
+          window.location.reload();
+        }, 4e3);
         this.$notify({
           title: "Внимание!",
           text: "Ваше задание #" + data.jobId + " успешно выполнено!",
