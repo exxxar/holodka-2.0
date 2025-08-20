@@ -30,8 +30,31 @@ import {Head} from '@inertiajs/vue3';
                                                     </template>
 
                                                 </Chart>-->
-
-                        <Chart
+                        <table class="w-full border border-gray-300 text-sm">
+                            <thead class="bg-gray-100">
+                            <tr>
+                                <th class="border px-2 py-1 text-center">Пользователь</th>
+                                <th class="border px-2 py-1 text-center">Проверено</th>
+                                <th class="border px-2 py-1 text-center">Новые</th>
+                                <th class="border px-2 py-1 text-center">В процессе</th>
+                                <th class="border px-2 py-1 text-center">Не готовы</th>
+                                <th class="border px-2 py-1 text-center">Отклонено</th>
+                                <th class="border px-2 py-1 text-center">Успех</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="(row, idx) in chart" :key="idx" class="hover:bg-gray-50">
+                                <td class="border px-2 py-1">{{ row.name }}</td>
+                                <td class="border px-2 py-1 text-center">{{ row.checked }}</td>
+                                <td class="border px-2 py-1 text-center">{{ row.new }}</td>
+                                <td class="border px-2 py-1 text-center">{{ row.in_process }}</td>
+                                <td class="border px-2 py-1 text-center">{{ row.not_ready }}</td>
+                                <td class="border px-2 py-1 text-center">{{ row.decline }}</td>
+                                <td class="border px-2 py-1 text-center">{{ row.success }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+<!--                        <Chart
                             v-if="loaded"
                             :size="{ width: 1000, height: 720 }"
                             :data="chart"
@@ -59,7 +82,7 @@ import {Head} from '@inertiajs/vue3';
                                 />
                             </template>
 
-                        </Chart>
+                        </Chart>-->
                     </div>
 
                 </div>
