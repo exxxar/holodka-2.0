@@ -36,10 +36,10 @@ class RunReCastData extends Command
 
         $jobs = UserJob::query()
             ->where(function ($q) {
-                $q->whereNull("completed_at")
-                    ->where("status", 1);
+                $q->whereNull("token")
+                    ->orWhere("status", 1);
             })
-            ->orWhereNull("token")
+            ->where('created_at', '<', Carbon::now()->subHours(5))
             ->get();
 
         foreach ($jobs as $job) {
