@@ -31,17 +31,39 @@ import {Head} from '@inertiajs/vue3';
 
                                                 </Chart>-->
                         <template v-if="chart.length>0">
-                            <h3 class="font-semibold text-xl text-gray-800 leading-tight my-3">Объем работы с людьми</h3>
+                            <h3 class="font-semibold text-xl text-gray-800 leading-tight my-3">Объем работы с
+                                людьми</h3>
                             <table class="w-full border border-gray-300 text-sm">
                                 <thead class="bg-gray-100">
                                 <tr>
-                                    <th class="border px-2 py-1 text-center">Пользователь</th>
-                                    <th class="border px-2 py-1 text-center">Проверено</th>
-                                    <th class="border px-2 py-1 text-center">Новые</th>
-                                    <th class="border px-2 py-1 text-center">В процессе</th>
-                                    <th class="border px-2 py-1 text-center">Не готовы</th>
-                                    <th class="border px-2 py-1 text-center">Отклонено</th>
-                                    <th class="border px-2 py-1 text-center">Успех</th>
+                                    <th
+                                        @click="sortField('name')"
+                                        class="border px-2 py-1 text-center">Пользователь
+                                    </th>
+                                    <th
+                                        @click="sortField('persons_checked')"
+                                        class="border px-2 py-1 text-center">Проверено
+                                    </th>
+                                    <th
+                                        @click="sortField('persons_new')"
+                                        class="border px-2 py-1 text-center">Новые
+                                    </th>
+                                    <th
+                                        @click="sortField('persons_in_process')"
+                                        class="border px-2 py-1 text-center">В процессе
+                                    </th>
+                                    <th
+                                        @click="sortField('persons_not_ready')"
+                                        class="border px-2 py-1 text-center">Не готовы
+                                    </th>
+                                    <th
+                                        @click="sortField('persons_decline')"
+                                        class="border px-2 py-1 text-center">Отклонено
+                                    </th>
+                                    <th
+                                        @click="sortField('persons_success')"
+                                        class="border px-2 py-1 text-center">Успех
+                                    </th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -66,12 +88,30 @@ import {Head} from '@inertiajs/vue3';
                             <table class="w-full border border-gray-300 text-sm">
                                 <thead class="bg-gray-100">
                                 <tr>
-                                    <th class="border px-2 py-1 text-center">Пользователь</th>
-                                    <th class="border px-2 py-1 text-center">Новые</th>
-                                    <th class="border px-2 py-1 text-center">В процессе</th>
-                                    <th class="border px-2 py-1 text-center">Готовы</th>
-                                    <th class="border px-2 py-1 text-center">Отклонено</th>
-                                    <th class="border px-2 py-1 text-center">Собрано</th>
+                                    <th
+                                        @click="sortField('name')"
+                                        class="border px-2 py-1 text-center cursor-pointer">Пользователь
+                                    </th>
+                                    <th
+                                        @click="sortField('jobs_new')"
+                                        class="border px-2 py-1 text-center cursor-pointer">Новые
+                                    </th>
+                                    <th
+                                        @click="sortField('jobs_in_process')"
+                                        class="border px-2 py-1 text-center cursor-pointer">В процессе
+                                    </th>
+                                    <th
+                                        @click="sortField('jobs_completed')"
+                                        class="border px-2 py-1 text-center cursor-pointer">Готовы
+                                    </th>
+                                    <th
+                                        @click="sortField('jobs_error')"
+                                        class="border px-2 py-1 text-center cursor-pointer">Отклонено
+                                    </th>
+                                    <th
+                                        @click="sortField('persons_summary')"
+                                        class="border px-2 py-1 text-center cursor-pointer">Собрано
+                                    </th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -141,6 +181,10 @@ export default {
     data() {
         return {
             loaded: true,
+            sort: {
+                direction: 'desc',
+                field: 'name'
+            },
             tooltipConfig: {
                 checked: {label: 'Взяты в работу', color: '#ffe775'},
                 new: {label: 'Новые', color: '#54a375'},
@@ -177,10 +221,24 @@ export default {
         this.loadStatistic()
     },
     methods: {
+        sortField(field) {
+            if (field === this.sort.field)
+                this.sort.direction = this.sort.direction === 'desc' ? "asc" : "desc"
+
+            this.sort.field = field
+
+
+            this.loadStatistic()
+        },
         loadStatistic() {
 
             this.loaded = false
-            this.$store.dispatch("loadStatistic").then(resp => {
+            this.$store.dispatch("loadStatistic", {
+                dataObject: {
+                    sort_field: this.sort.field,
+                    sort_direction: this.sort.direction
+                }
+            }).then(resp => {
                 this.chart = resp.persons || []
                 this.jobs = resp.jobs || []
                 this.loaded = true

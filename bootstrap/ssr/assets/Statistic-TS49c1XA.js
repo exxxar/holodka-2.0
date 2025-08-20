@@ -13,6 +13,10 @@ const __default__ = {
   data() {
     return {
       loaded: true,
+      sort: {
+        direction: "desc",
+        field: "name"
+      },
       tooltipConfig: {
         checked: { label: "Взяты в работу", color: "#ffe775" },
         new: { label: "Новые", color: "#54a375" },
@@ -48,9 +52,20 @@ const __default__ = {
     this.loadStatistic();
   },
   methods: {
+    sortField(field) {
+      if (field === this.sort.field)
+        this.sort.direction = this.sort.direction === "desc" ? "asc" : "desc";
+      this.sort.field = field;
+      this.loadStatistic();
+    },
     loadStatistic() {
       this.loaded = false;
-      this.$store.dispatch("loadStatistic").then((resp) => {
+      this.$store.dispatch("loadStatistic", {
+        dataObject: {
+          sort_field: this.sort.field,
+          sort_direction: this.sort.direction
+        }
+      }).then((resp) => {
         this.chart = resp.persons || [];
         this.jobs = resp.jobs || [];
         this.loaded = true;
@@ -79,7 +94,7 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
           if (_push2) {
             _push2(`<div class="py-12"${_scopeId}><div class="max-w-7xl mx-auto sm:px-6 lg:px-8"${_scopeId}><div class="bg-white overflow-hidden shadow-sm sm:rounded-lg"${_scopeId}><div class="p-6 text-gray-900 d-flex justify-center flex-wrap"${_scopeId}>`);
             if (_ctx.chart.length > 0) {
-              _push2(`<!--[--><h3 class="font-semibold text-xl text-gray-800 leading-tight my-3"${_scopeId}>Объем работы с людьми</h3><table class="w-full border border-gray-300 text-sm"${_scopeId}><thead class="bg-gray-100"${_scopeId}><tr${_scopeId}><th class="border px-2 py-1 text-center"${_scopeId}>Пользователь</th><th class="border px-2 py-1 text-center"${_scopeId}>Проверено</th><th class="border px-2 py-1 text-center"${_scopeId}>Новые</th><th class="border px-2 py-1 text-center"${_scopeId}>В процессе</th><th class="border px-2 py-1 text-center"${_scopeId}>Не готовы</th><th class="border px-2 py-1 text-center"${_scopeId}>Отклонено</th><th class="border px-2 py-1 text-center"${_scopeId}>Успех</th></tr></thead><tbody${_scopeId}><!--[-->`);
+              _push2(`<!--[--><h3 class="font-semibold text-xl text-gray-800 leading-tight my-3"${_scopeId}>Объем работы с людьми</h3><table class="w-full border border-gray-300 text-sm"${_scopeId}><thead class="bg-gray-100"${_scopeId}><tr${_scopeId}><th class="border px-2 py-1 text-center"${_scopeId}>Пользователь </th><th class="border px-2 py-1 text-center"${_scopeId}>Проверено </th><th class="border px-2 py-1 text-center"${_scopeId}>Новые </th><th class="border px-2 py-1 text-center"${_scopeId}>В процессе </th><th class="border px-2 py-1 text-center"${_scopeId}>Не готовы </th><th class="border px-2 py-1 text-center"${_scopeId}>Отклонено </th><th class="border px-2 py-1 text-center"${_scopeId}>Успех </th></tr></thead><tbody${_scopeId}><!--[-->`);
               ssrRenderList(_ctx.chart, (row, idx) => {
                 _push2(`<tr class="hover:bg-gray-50"${_scopeId}><td class="border px-2 py-1"${_scopeId}>${ssrInterpolate(row.name)}</td><td class="border px-2 py-1 text-center"${_scopeId}>${ssrInterpolate(row.checked)}</td><td class="border px-2 py-1 text-center"${_scopeId}>${ssrInterpolate(row.new)}</td><td class="border px-2 py-1 text-center"${_scopeId}>${ssrInterpolate(row.in_process)}</td><td class="border px-2 py-1 text-center"${_scopeId}>${ssrInterpolate(row.not_ready)}</td><td class="border px-2 py-1 text-center"${_scopeId}>${ssrInterpolate(row.decline)}</td><td class="border px-2 py-1 text-center"${_scopeId}>${ssrInterpolate(row.success)}</td></tr>`);
               });
@@ -88,7 +103,7 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
               _push2(`<!---->`);
             }
             if (_ctx.jobs.length > 0) {
-              _push2(`<!--[--><h3 class="font-semibold text-xl text-gray-800 leading-tight my-3"${_scopeId}>Объем загрузки задач</h3><table class="w-full border border-gray-300 text-sm"${_scopeId}><thead class="bg-gray-100"${_scopeId}><tr${_scopeId}><th class="border px-2 py-1 text-center"${_scopeId}>Пользователь</th><th class="border px-2 py-1 text-center"${_scopeId}>Новые</th><th class="border px-2 py-1 text-center"${_scopeId}>В процессе</th><th class="border px-2 py-1 text-center"${_scopeId}>Готовы</th><th class="border px-2 py-1 text-center"${_scopeId}>Отклонено</th><th class="border px-2 py-1 text-center"${_scopeId}>Собрано</th></tr></thead><tbody${_scopeId}><!--[-->`);
+              _push2(`<!--[--><h3 class="font-semibold text-xl text-gray-800 leading-tight my-3"${_scopeId}>Объем загрузки задач</h3><table class="w-full border border-gray-300 text-sm"${_scopeId}><thead class="bg-gray-100"${_scopeId}><tr${_scopeId}><th class="border px-2 py-1 text-center cursor-pointer"${_scopeId}>Пользователь </th><th class="border px-2 py-1 text-center cursor-pointer"${_scopeId}>Новые </th><th class="border px-2 py-1 text-center cursor-pointer"${_scopeId}>В процессе </th><th class="border px-2 py-1 text-center cursor-pointer"${_scopeId}>Готовы </th><th class="border px-2 py-1 text-center cursor-pointer"${_scopeId}>Отклонено </th><th class="border px-2 py-1 text-center cursor-pointer"${_scopeId}>Собрано </th></tr></thead><tbody${_scopeId}><!--[-->`);
               ssrRenderList(_ctx.jobs, (row, idx) => {
                 _push2(`<tr class="hover:bg-gray-50"${_scopeId}><td class="border px-2 py-1"${_scopeId}>${ssrInterpolate(row.name)}</td><td class="border px-2 py-1 text-center"${_scopeId}>${ssrInterpolate(row.job_new)}</td><td class="border px-2 py-1 text-center"${_scopeId}>${ssrInterpolate(row.job_in_process)}</td><td class="border px-2 py-1 text-center"${_scopeId}>${ssrInterpolate(row.job_completed)}</td><td class="border px-2 py-1 text-center"${_scopeId}>${ssrInterpolate(row.job_error)}</td><td class="border px-2 py-1 text-center"${_scopeId}>${ssrInterpolate(row.summary_persons)}</td></tr>`);
               });
@@ -113,13 +128,34 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
                         createVNode("table", { class: "w-full border border-gray-300 text-sm" }, [
                           createVNode("thead", { class: "bg-gray-100" }, [
                             createVNode("tr", null, [
-                              createVNode("th", { class: "border px-2 py-1 text-center" }, "Пользователь"),
-                              createVNode("th", { class: "border px-2 py-1 text-center" }, "Проверено"),
-                              createVNode("th", { class: "border px-2 py-1 text-center" }, "Новые"),
-                              createVNode("th", { class: "border px-2 py-1 text-center" }, "В процессе"),
-                              createVNode("th", { class: "border px-2 py-1 text-center" }, "Не готовы"),
-                              createVNode("th", { class: "border px-2 py-1 text-center" }, "Отклонено"),
-                              createVNode("th", { class: "border px-2 py-1 text-center" }, "Успех")
+                              createVNode("th", {
+                                onClick: ($event) => _ctx.sortField("name"),
+                                class: "border px-2 py-1 text-center"
+                              }, "Пользователь ", 8, ["onClick"]),
+                              createVNode("th", {
+                                onClick: ($event) => _ctx.sortField("persons_checked"),
+                                class: "border px-2 py-1 text-center"
+                              }, "Проверено ", 8, ["onClick"]),
+                              createVNode("th", {
+                                onClick: ($event) => _ctx.sortField("persons_new"),
+                                class: "border px-2 py-1 text-center"
+                              }, "Новые ", 8, ["onClick"]),
+                              createVNode("th", {
+                                onClick: ($event) => _ctx.sortField("persons_in_process"),
+                                class: "border px-2 py-1 text-center"
+                              }, "В процессе ", 8, ["onClick"]),
+                              createVNode("th", {
+                                onClick: ($event) => _ctx.sortField("persons_not_ready"),
+                                class: "border px-2 py-1 text-center"
+                              }, "Не готовы ", 8, ["onClick"]),
+                              createVNode("th", {
+                                onClick: ($event) => _ctx.sortField("persons_decline"),
+                                class: "border px-2 py-1 text-center"
+                              }, "Отклонено ", 8, ["onClick"]),
+                              createVNode("th", {
+                                onClick: ($event) => _ctx.sortField("persons_success"),
+                                class: "border px-2 py-1 text-center"
+                              }, "Успех ", 8, ["onClick"])
                             ])
                           ]),
                           createVNode("tbody", null, [
@@ -145,12 +181,30 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
                         createVNode("table", { class: "w-full border border-gray-300 text-sm" }, [
                           createVNode("thead", { class: "bg-gray-100" }, [
                             createVNode("tr", null, [
-                              createVNode("th", { class: "border px-2 py-1 text-center" }, "Пользователь"),
-                              createVNode("th", { class: "border px-2 py-1 text-center" }, "Новые"),
-                              createVNode("th", { class: "border px-2 py-1 text-center" }, "В процессе"),
-                              createVNode("th", { class: "border px-2 py-1 text-center" }, "Готовы"),
-                              createVNode("th", { class: "border px-2 py-1 text-center" }, "Отклонено"),
-                              createVNode("th", { class: "border px-2 py-1 text-center" }, "Собрано")
+                              createVNode("th", {
+                                onClick: ($event) => _ctx.sortField("name"),
+                                class: "border px-2 py-1 text-center cursor-pointer"
+                              }, "Пользователь ", 8, ["onClick"]),
+                              createVNode("th", {
+                                onClick: ($event) => _ctx.sortField("jobs_new"),
+                                class: "border px-2 py-1 text-center cursor-pointer"
+                              }, "Новые ", 8, ["onClick"]),
+                              createVNode("th", {
+                                onClick: ($event) => _ctx.sortField("jobs_in_process"),
+                                class: "border px-2 py-1 text-center cursor-pointer"
+                              }, "В процессе ", 8, ["onClick"]),
+                              createVNode("th", {
+                                onClick: ($event) => _ctx.sortField("jobs_completed"),
+                                class: "border px-2 py-1 text-center cursor-pointer"
+                              }, "Готовы ", 8, ["onClick"]),
+                              createVNode("th", {
+                                onClick: ($event) => _ctx.sortField("jobs_error"),
+                                class: "border px-2 py-1 text-center cursor-pointer"
+                              }, "Отклонено ", 8, ["onClick"]),
+                              createVNode("th", {
+                                onClick: ($event) => _ctx.sortField("persons_summary"),
+                                class: "border px-2 py-1 text-center cursor-pointer"
+                              }, "Собрано ", 8, ["onClick"])
                             ])
                           ]),
                           createVNode("tbody", null, [
