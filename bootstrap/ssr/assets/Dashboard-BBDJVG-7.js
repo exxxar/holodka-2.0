@@ -303,7 +303,7 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
             if (!_ctx.queue_count) {
               _push2(`<span class="spinner-border spinner-border-sm" role="status"${_scopeId}><span class="visually-hidden"${_scopeId}>Loading...</span></span>`);
             } else {
-              _push2(`<span style="${ssrRenderStyle({ "font-size": "10px" })}" class="text-gray-400"${_scopeId}>${ssrInterpolate(_ctx.queue_count)} задача в глобальной очереди (${ssrInterpolate(_ctx.queue_count / 5 * 10 + 10)} мин) </span>`);
+              _push2(`<span style="${ssrRenderStyle({ "font-size": "10px" })}" class="text-gray-400"${_scopeId}>${ssrInterpolate(_ctx.queue_count)} в глобальной очереди (${ssrInterpolate(_ctx.queue_count / 10 * 10 + 10)} мин) </span>`);
             }
             _push2(`</h6>`);
             _push2(ssrRenderComponent(_sfc_main$1, null, null, _parent2, _scopeId));
@@ -361,7 +361,7 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
                             key: 1,
                             style: { "font-size": "10px" },
                             class: "text-gray-400"
-                          }, toDisplayString(_ctx.queue_count) + " задача в глобальной очереди (" + toDisplayString(_ctx.queue_count / 5 * 10 + 10) + " мин) ", 1))
+                          }, toDisplayString(_ctx.queue_count) + " в глобальной очереди (" + toDisplayString(_ctx.queue_count / 10 * 10 + 10) + " мин) ", 1))
                         ]),
                         createVNode(_sfc_main$1)
                       ])

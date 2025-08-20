@@ -100,7 +100,7 @@ import JobsTable from "@/Components/Persons/JobsTable.vue";
                                     <span class="visually-hidden">Loading...</span>
                                 </span>
                                 <span style="font-size:10px;" class="text-gray-400" v-else>
-                                    {{queue_count}} задача в глобальной очереди ({{(queue_count / 5)*10 + 10 }} мин)
+                                    {{queue_count}} в глобальной очереди ({{(queue_count / 10)*10 + 10 }} мин)
 
                                 </span>
                             </h6>
