@@ -41,6 +41,7 @@ class RunGatherData extends Command
         foreach ($jobs as $job)
         {
             $job->status = UserJobStatusEnum::Error->value;
+            $job->completed_at = Carbon::now("+3");
             $job->save();
         }
 
@@ -72,13 +73,13 @@ class RunGatherData extends Command
 
                 $job->result_count = $count ?? 0;
                 $job->status = UserJobStatusEnum::Completed->value;
-                $job->completed_at = Carbon::now();
+                $job->completed_at = Carbon::now("+3");
                 $job->save();
 
                 event(new MyEvent('hello world', $job->user_id, $job->group, $job->id));
             }catch (\Exception $exception){
                 $job->result_count = $count ?? 0;
-                $job->completed_at = Carbon::now();
+                $job->completed_at = Carbon::now("+3");
                 $job->status = UserJobStatusEnum::Error->value;
                 $job->save();
 

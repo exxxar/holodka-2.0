@@ -35,8 +35,8 @@ use VK\OAuth\VKOAuth;
 Route::get('/job-run', function () {
     Artisan::call('app:run-gather-data');
 
-   // $process = new Process(['php', 'artisan', 'app:run-gather-data','--force']);
-   // $process->run(); // не блокирует основной поток
+    // $process = new Process(['php', 'artisan', 'app:run-gather-data','--force']);
+    // $process->run(); // не блокирует основной поток
     return "ok";
 });
 
@@ -167,23 +167,24 @@ Route::middleware('auth')->group(function () {
         $job = \App\Models\UserJob::query()->create([
             "group" => $group,
             "user_id" => $user->id,
-            'is_only_active' =>$isOnlyActive,
+            'is_only_active' => $isOnlyActive,
             "max_post_count" => $max,
             "result_count" => 0,
-            'status'=>\App\Enums\UserJobStatusEnum::New->value,
-            'token'=>$user->vk_access_token,
+            'status' => \App\Enums\UserJobStatusEnum::New->value,
+            'token' => $user->vk_access_token,
             "completed_at" => null,
+            'created_at' => Carbon::now("+3")
         ]);
 
         ParseVKJob::dispatch();
 
         return response()->noContent();
-      /*  ParseVKJob::dispatch($group,
-            $max,
-            $job->id,
-            $user->id,
-            $user->vk_access_token)
-            ->delay(now()->addSeconds(5));*/
+        /*  ParseVKJob::dispatch($group,
+              $max,
+              $job->id,
+              $user->id,
+              $user->vk_access_token)
+              ->delay(now()->addSeconds(5));*/
     });
 
     Route::post("/store-company", function (\Illuminate\Http\Request $request) {
