@@ -34,13 +34,14 @@ class RunGatherData extends Command
         ini_set('max_execution_time', '3000');
 
         $jobs = UserJob::query()
-            ->whereNull("completed_at")
-            ->where("status", 1)
+            ->where(function ($q) {
+                $q->whereNull("completed_at")
+                    ->where("status", 1);
+            })
             ->orWhereNull("token")
             ->get();
 
-        foreach ($jobs as $job)
-        {
+        foreach ($jobs as $job) {
             $job->status = UserJobStatusEnum::Error->value;
             $job->completed_at = Carbon::now("+3");
             $job->save();
@@ -48,11 +49,12 @@ class RunGatherData extends Command
 
         $jobs = UserJob::query()
             ->whereNull("completed_at")
+            ->whereNotNull("token")
             ->where("status", 0)
             ->take(10)
             ->get();
 
-       // Log::info("TEST".print_r($jobs->toArray(), true));
+        // Log::info("TEST".print_r($jobs->toArray(), true));
 
         foreach ($jobs as $job) {
             $count = 0;
@@ -79,7 +81,7 @@ class RunGatherData extends Command
                 $job->save();
 
                 event(new MyEvent('hello world', $job->user_id, $job->group, $job->id));
-            }catch (\Exception $exception){
+            } catch (\Exception $exception) {
                 $job->result_count = $count ?? 0;
                 $job->completed_at = Carbon::now("+3");
                 $job->status = UserJobStatusEnum::Error->value;

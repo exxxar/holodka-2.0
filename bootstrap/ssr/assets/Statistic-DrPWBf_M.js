@@ -97,7 +97,7 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
               _push2(`<!---->`);
             }
             if (_ctx.jobs.length === 0 || _ctx.chart.length === 0) {
-              _push2(`<!--[--><div class="d-flex justify-content-center"${_scopeId}><div class="spinner-border" role="status"${_scopeId}><span class="visually-hidden"${_scopeId}>Loading...</span></div></div><p class="my-3 text-center fw-bold"${_scopeId}> Подготавливаем данные... Это займет какое-то время </p><!--]-->`);
+              _push2(`<!--[--><div class="d-flex justify-content-center align-items-center"${_scopeId}><div class="spinner-border" role="status"${_scopeId}><span class="visually-hidden"${_scopeId}>Loading...</span></div></div><p class="my-3 text-center fw-bold"${_scopeId}> Подготавливаем данные... Это займет какое-то время </p><!--]-->`);
             } else {
               _push2(`<!---->`);
             }
@@ -171,7 +171,7 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
                         ])
                       ], 64)) : createCommentVNode("", true),
                       _ctx.jobs.length === 0 || _ctx.chart.length === 0 ? (openBlock(), createBlock(Fragment, { key: 2 }, [
-                        createVNode("div", { class: "d-flex justify-content-center" }, [
+                        createVNode("div", { class: "d-flex justify-content-center align-items-center" }, [
                           createVNode("div", {
                             class: "spinner-border",
                             role: "status"
