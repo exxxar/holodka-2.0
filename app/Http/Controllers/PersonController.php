@@ -30,50 +30,52 @@ class PersonController extends Controller
     public function getStatistic(Request $request)
     {
 
-       // $currentUser = User::query()->find(Auth::user()->id);
-
         $users = User::query()
-            //->where("company", env("PRODUCT_KEY") ?? null)
+            ->withCount([
+                // Persons
+                'persons as persons_checked' => fn($q) => $q->whereNotNull('checked_at'),
+                'persons as persons_new' => fn($q) => $q->where('status', 0),
+                'persons as persons_in_process' => fn($q) => $q->where('status', 1),
+                'persons as persons_not_ready' => fn($q) => $q->where('status', 3),
+                'persons as persons_decline' => fn($q) => $q->where('status', 2),
+                'persons as persons_success' => fn($q) => $q->where('status', 4),
+                'persons as persons_summary',
+
+                // Jobs
+                'jobs as jobs_new' => fn($q) => $q->where('status', 0),
+                'jobs as jobs_in_process' => fn($q) => $q->where('status', 1),
+                'jobs as jobs_completed' => fn($q) => $q->where('status', 2),
+                'jobs as jobs_error' => fn($q) => $q->where('status', 3),
+            ])
             ->get();
 
-        $tmp = [];
-        $TmpJobs = [];
+        $persons = [];
+        $jobs = [];
+
         foreach ($users as $user) {
-
-            $persons = Person::query()
-                ->where("owner_id", $user->id)
-                ->get();
-
-            $jobs = UserJob::query()
-                ->where("user_id", $user->id)
-                ->get();
-
-            $tmp[] = (object)[
-                "name" => $user->name,
-                "checked" => Collection::make($persons)->whereNotNull("checked_at")->count(),
-                "new" => Collection::make($persons)->where("status", 0)->count(),
-                "in_process" => Collection::make($persons)->where("status", 1)->count(),
-                "not_ready" => Collection::make($persons)->where("status", 3)->count(),
-                "decline" => Collection::make($persons)->where("status", 2)->count(),
-                "success" => Collection::make($persons)->where("status", 4)->count(),
-
+            $persons[] = (object)[
+                "name"       => $user->name,
+                "checked"    => $user->persons_checked,
+                "new"        => $user->persons_new,
+                "in_process" => $user->persons_in_process,
+                "not_ready"  => $user->persons_not_ready,
+                "decline"    => $user->persons_decline,
+                "success"    => $user->persons_success,
             ];
 
-
-            $tmpJobs[] = (object)[
-                "name" => $user->name,
-                "job_new"=> Collection::make($jobs)->where("status", 0)->count(),
-                "job_in_process"=> Collection::make($jobs)->where("status", 1)->count(),
-                "job_completed"=> Collection::make($jobs)->where("status", 2)->count(),
-                "job_error"=> Collection::make($jobs)->where("status", 3)->count(),
-                "summary_persons"=> Collection::make($persons)->count(),
+            $jobs[] = (object)[
+                "name"            => $user->name,
+                "job_new"         => $user->jobs_new,
+                "job_in_process"  => $user->jobs_in_process,
+                "job_completed"   => $user->jobs_completed,
+                "job_error"       => $user->jobs_error,
+                "summary_persons" => $user->persons_summary,
             ];
-
         }
 
         return response()->json([
-            "persons"=>$tmp,
-            "jobs"=>$tmpJobs
+            "persons" => $persons,
+            "jobs"    => $jobs,
         ]);
     }
 
