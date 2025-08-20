@@ -6,6 +6,7 @@ use App\Http\Resources\PersonCollection;
 use App\Http\Resources\PersonResource;
 use App\Models\Person;
 use App\Models\User;
+use App\Models\UserJob;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -29,17 +30,22 @@ class PersonController extends Controller
     public function getStatistic(Request $request)
     {
 
-        $currentUser = User::query()->find(Auth::user()->id);
+       // $currentUser = User::query()->find(Auth::user()->id);
 
         $users = User::query()
             //->where("company", env("PRODUCT_KEY") ?? null)
             ->get();
 
         $tmp = [];
+        $TmpJobs = [];
         foreach ($users as $user) {
 
             $persons = Person::query()
                 ->where("owner_id", $user->id)
+                ->get();
+
+            $jobs = UserJob::query()
+                ->where("user_id", $user->id)
                 ->get();
 
             $tmp[] = (object)[
@@ -50,11 +56,25 @@ class PersonController extends Controller
                 "not_ready" => Collection::make($persons)->where("status", 3)->count(),
                 "decline" => Collection::make($persons)->where("status", 2)->count(),
                 "success" => Collection::make($persons)->where("status", 4)->count(),
+
+            ];
+
+
+            $tmpJobs[] = (object)[
+                "name" => $user->name,
+                "job_new"=> Collection::make($jobs)->where("status", 0)->count(),
+                "job_in_process"=> Collection::make($jobs)->where("status", 1)->count(),
+                "job_completed"=> Collection::make($jobs)->where("status", 2)->count(),
+                "job_error"=> Collection::make($jobs)->where("status", 3)->count(),
+                "summary_persons"=> Collection::make($persons)->count(),
             ];
 
         }
 
-        return response()->json($tmp);
+        return response()->json([
+            "persons"=>$tmp,
+            "jobs"=>$tmpJobs
+        ]);
     }
 
     public function excelDownload(Request $request)

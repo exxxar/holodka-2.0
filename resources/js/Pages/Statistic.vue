@@ -17,7 +17,7 @@ import {Head} from '@inertiajs/vue3';
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900 d-flex justify-center">
+                    <div class="p-6 text-gray-900 d-flex justify-center flex-wrap">
                         <!--                        <Chart
                                                     :size="{ width: 500, height: 400 }"
                                                     :data="chart"
@@ -30,59 +30,101 @@ import {Head} from '@inertiajs/vue3';
                                                     </template>
 
                                                 </Chart>-->
-                        <table class="w-full border border-gray-300 text-sm">
-                            <thead class="bg-gray-100">
-                            <tr>
-                                <th class="border px-2 py-1 text-center">Пользователь</th>
-                                <th class="border px-2 py-1 text-center">Проверено</th>
-                                <th class="border px-2 py-1 text-center">Новые</th>
-                                <th class="border px-2 py-1 text-center">В процессе</th>
-                                <th class="border px-2 py-1 text-center">Не готовы</th>
-                                <th class="border px-2 py-1 text-center">Отклонено</th>
-                                <th class="border px-2 py-1 text-center">Успех</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr v-for="(row, idx) in chart" :key="idx" class="hover:bg-gray-50">
-                                <td class="border px-2 py-1">{{ row.name }}</td>
-                                <td class="border px-2 py-1 text-center">{{ row.checked }}</td>
-                                <td class="border px-2 py-1 text-center">{{ row.new }}</td>
-                                <td class="border px-2 py-1 text-center">{{ row.in_process }}</td>
-                                <td class="border px-2 py-1 text-center">{{ row.not_ready }}</td>
-                                <td class="border px-2 py-1 text-center">{{ row.decline }}</td>
-                                <td class="border px-2 py-1 text-center">{{ row.success }}</td>
-                            </tr>
-                            </tbody>
-                        </table>
-<!--                        <Chart
-                            v-if="loaded"
-                            :size="{ width: 1000, height: 720 }"
-                            :data="chart"
-                            :margin="margin"
-                            :direction="direction"
-                            :axis="axis">
+                        <template v-if="chart.length>0">
+                            <h3 class="font-semibold text-xl text-gray-800 leading-tight my-3">Объем работы с людьми</h3>
+                            <table class="w-full border border-gray-300 text-sm">
+                                <thead class="bg-gray-100">
+                                <tr>
+                                    <th class="border px-2 py-1 text-center">Пользователь</th>
+                                    <th class="border px-2 py-1 text-center">Проверено</th>
+                                    <th class="border px-2 py-1 text-center">Новые</th>
+                                    <th class="border px-2 py-1 text-center">В процессе</th>
+                                    <th class="border px-2 py-1 text-center">Не готовы</th>
+                                    <th class="border px-2 py-1 text-center">Отклонено</th>
+                                    <th class="border px-2 py-1 text-center">Успех</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr v-for="(row, idx) in chart" :key="idx" class="hover:bg-gray-50">
+                                    <td class="border px-2 py-1">{{ row.name }}</td>
+                                    <td class="border px-2 py-1 text-center">{{ row.checked }}</td>
+                                    <td class="border px-2 py-1 text-center">{{ row.new }}</td>
+                                    <td class="border px-2 py-1 text-center">{{ row.in_process }}</td>
+                                    <td class="border px-2 py-1 text-center">{{ row.not_ready }}</td>
+                                    <td class="border px-2 py-1 text-center">{{ row.decline }}</td>
+                                    <td class="border px-2 py-1 text-center">{{ row.success }}</td>
+                                </tr>
+                                </tbody>
+                            </table>
 
-                            <template #layers>
 
-                                <Grid strokeDasharray="2,2"/>
-                                <Bar :dataKeys="['name', 'checked']" :barStyle="{ fill: '#ffe775' }"/>
-                                <Bar :dataKeys="['name', 'new']" :barStyle="{ fill: '#54a375' }"/>
-                                <Bar :dataKeys="['name', 'in_process']" :barStyle="{ fill: '#0ea9cb' }"/>
-                                <Bar :dataKeys="['name', 'not_ready']" :barStyle="{ fill: '#d2ab65' }"/>
-                                <Bar :dataKeys="['name', 'decline']" :barStyle="{ fill: '#ff0348' }"/>
-                                <Bar :dataKeys="['name', 'success']" :barStyle="{ fill: '#00ff38' }"/>
-                                <Marker :value="1000" label="Avg." color="#e76f51" strokeWidth="2"
-                                        strokeDasharray="6 6"/>
-                            </template>
+                        </template>
 
-                            <template #widgets>
-                                <Tooltip
-                                    borderColor="#48CAE4"
-                                    :config="tooltipConfig"
-                                />
-                            </template>
 
-                        </Chart>-->
+                        <template v-if="jobs.length>0">
+                            <h3 class="font-semibold text-xl text-gray-800 leading-tight my-3">Объем загрузки задач</h3>
+                            <table class="w-full border border-gray-300 text-sm">
+                                <thead class="bg-gray-100">
+                                <tr>
+                                    <th class="border px-2 py-1 text-center">Пользователь</th>
+                                    <th class="border px-2 py-1 text-center">Новые</th>
+                                    <th class="border px-2 py-1 text-center">В процессе</th>
+                                    <th class="border px-2 py-1 text-center">Готовы</th>
+                                    <th class="border px-2 py-1 text-center">Отклонено</th>
+                                    <th class="border px-2 py-1 text-center">Собрано</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr v-for="(row, idx) in jobs" :key="idx" class="hover:bg-gray-50">
+                                    <td class="border px-2 py-1">{{ row.name }}</td>
+                                    <td class="border px-2 py-1 text-center">{{ row.job_new }}</td>
+                                    <td class="border px-2 py-1 text-center">{{ row.job_in_process }}</td>
+                                    <td class="border px-2 py-1 text-center">{{ row.job_completed }}</td>
+                                    <td class="border px-2 py-1 text-center">{{ row.job_error }}</td>
+                                    <td class="border px-2 py-1 text-center">{{ row.summary_persons }}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </template>
+                        <template v-if="jobs.length === 0 || chart.length=== 0">
+                            <div class="d-flex justify-content-center">
+                                <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                            <p class="my-3 text-center fw-bold">
+                                Подготавливаем данные... Это займет какое-то время
+                            </p>
+                        </template>
+                        <!--                        <Chart
+                                                    v-if="loaded"
+                                                    :size="{ width: 1000, height: 720 }"
+                                                    :data="chart"
+                                                    :margin="margin"
+                                                    :direction="direction"
+                                                    :axis="axis">
+
+                                                    <template #layers>
+
+                                                        <Grid strokeDasharray="2,2"/>
+                                                        <Bar :dataKeys="['name', 'checked']" :barStyle="{ fill: '#ffe775' }"/>
+                                                        <Bar :dataKeys="['name', 'new']" :barStyle="{ fill: '#54a375' }"/>
+                                                        <Bar :dataKeys="['name', 'in_process']" :barStyle="{ fill: '#0ea9cb' }"/>
+                                                        <Bar :dataKeys="['name', 'not_ready']" :barStyle="{ fill: '#d2ab65' }"/>
+                                                        <Bar :dataKeys="['name', 'decline']" :barStyle="{ fill: '#ff0348' }"/>
+                                                        <Bar :dataKeys="['name', 'success']" :barStyle="{ fill: '#00ff38' }"/>
+                                                        <Marker :value="1000" label="Avg." color="#e76f51" strokeWidth="2"
+                                                                strokeDasharray="6 6"/>
+                                                    </template>
+
+                                                    <template #widgets>
+                                                        <Tooltip
+                                                            borderColor="#48CAE4"
+                                                            :config="tooltipConfig"
+                                                        />
+                                                    </template>
+
+                                                </Chart>-->
                     </div>
 
                 </div>
@@ -98,24 +140,17 @@ export default {
     components: {Chart, Grid, Line, Bar, Tooltip},
     data() {
         return {
-            loaded:true,
-            tooltipConfig:{
-                checked: { label:'Взяты в работу', color: '#ffe775' },
-                new: {  label:'Новые', color: '#54a375' },
-                in_process: {  label:'В процесс', color: '#0ea9cb' },
-                not_ready: {  label:'Не готовы \ думают', color: '#d2ab65' },
-                decline: {  label:'Отказ', color: '#ff0348' },
-                success: { label:'Успех',  color: '#00ff38' },
+            loaded: true,
+            tooltipConfig: {
+                checked: {label: 'Взяты в работу', color: '#ffe775'},
+                new: {label: 'Новые', color: '#54a375'},
+                in_process: {label: 'В процесс', color: '#0ea9cb'},
+                not_ready: {label: 'Не готовы \ думают', color: '#d2ab65'},
+                decline: {label: 'Отказ', color: '#ff0348'},
+                success: {label: 'Успех', color: '#00ff38'},
             },
-            chart: [
-                {name: 'Гукай А.', checked: 1000, new: 500, in_process: 300, not_ready: 1235, decline: 1235, success: 1235,},
-                {name: 'Русина А.', checked: 2000, new: 900, in_process: 400, not_ready: 1235, decline: 1235,success: 1235,},
-                {name: 'Иванов И.', checked: 400, new: 400, in_process: 500, not_ready: 1235, decline: 1235,success: 1235,},
-                {name: 'Петров А.', checked: 6000, new: 1300, in_process: 700, not_ready: 1235, decline: 1235,success: 1235,},
-                {name: 'Семенов Е.', checked: 200, new: 100, in_process: 200, not_ready: 1235, decline: 1235,success: 1235,},
-                {name: 'Данилов Д.', checked: 600, new: 400, in_process: 300, not_ready: 1235, decline: 1235,success: 1235,},
-                {name: 'Кириченко В.', checked: 500, new: 90, in_process: 100, not_ready: 1235, decline: 1235,success: 1235,}
-            ],
+            chart: [],
+            jobs: [],
             direction: 'vertical',
             margin: {
                 left: 0,
@@ -146,7 +181,8 @@ export default {
 
             this.loaded = false
             this.$store.dispatch("loadStatistic").then(resp => {
-                this.chart = resp
+                this.chart = resp.persons || []
+                this.jobs = resp.jobs || []
                 this.loaded = true
             })
         }
