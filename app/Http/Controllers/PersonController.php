@@ -32,7 +32,7 @@ class PersonController extends Controller
         $currentUser = User::query()->find(Auth::user()->id);
 
         $users = User::query()
-            ->where("company", env("PRODUCT_KEY") ?? null)
+            //->where("company", env("PRODUCT_KEY") ?? null)
             ->get();
 
         $tmp = [];
