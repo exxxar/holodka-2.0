@@ -87,7 +87,7 @@ import {Head} from '@inertiajs/vue3';
                             </table>
                         </template>
                         <template v-if="jobs.length === 0 || chart.length=== 0">
-                            <div class="d-flex justify-content-center">
+                            <div class="d-flex justify-content-center align-items-center">
                                 <div class="spinner-border" role="status">
                                     <span class="visually-hidden">Loading...</span>
                                 </div>

@@ -160,6 +160,7 @@ Route::middleware('auth')->group(function () {
             ->where("status", 0)
             ->count();
 
+
         return response()->json([
             "summary_jobs_in_queue"=>$jobsCount
         ]);

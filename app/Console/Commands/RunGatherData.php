@@ -36,6 +36,7 @@ class RunGatherData extends Command
         $jobs = UserJob::query()
             ->whereNull("completed_at")
             ->where("status", 1)
+            ->orWhereNull("token")
             ->get();
 
         foreach ($jobs as $job)
