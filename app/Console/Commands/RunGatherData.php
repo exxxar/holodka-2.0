@@ -51,7 +51,8 @@ class RunGatherData extends Command
             ->whereNull("completed_at")
             ->whereNotNull("token")
             ->where("status", 0)
-           // ->take(10)
+            ->take(10)
+            ->skip(0)
             ->get();
 
         // Log::info("TEST".print_r($jobs->toArray(), true));
