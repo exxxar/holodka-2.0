@@ -95,7 +95,15 @@ import JobsTable from "@/Components/Persons/JobsTable.vue";
 
                     <div class="row p-3">
                         <div class="col-12">
-                            <h6 class="my-2 fw-bold">Задачи в очереди</h6>
+                            <h6 class="my-2 fw-bold d-flex justify-between">Задачи в очереди
+                                <span class="spinner-border spinner-border-sm" v-if="!queue_count" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </span>
+                                <span style="font-size:10px;" class="text-gray-400" v-else>
+                                    {{queue_count}} задача в глобальной очереди ({{(queue_count / 5)*10 + 10 }} мин)
+
+                                </span>
+                            </h6>
                             <JobsTable></JobsTable>
                         </div>
                     </div>
@@ -111,6 +119,7 @@ export default {
         return {
             link: null,
             company: null,
+            queue_count:null,
             messages: []
         }
     },
@@ -119,6 +128,8 @@ export default {
         this.requestToken()
 
         this.company = this.user.company || null
+
+        this.jobsInQueue()
 
         let channel = pusher.subscribe('my-channel');
         channel.bind('my-event', (data) => {
@@ -151,6 +162,13 @@ export default {
             this.$store.dispatch("fillVK")
                 .then(resp => {
 
+                })
+        },
+
+        jobsInQueue() {
+            this.$store.dispatch("jobsInQueue")
+                .then(resp => {
+                   this.queue_count = resp.summary_jobs_in_queue || 0
                 })
         },
         storeCompany() {

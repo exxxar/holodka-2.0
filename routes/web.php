@@ -5,6 +5,7 @@ use App\Events\MyEvent;
 use App\Http\Controllers\ProfileController;
 use App\Jobs\ParseVKJob;
 use App\Models\User;
+use App\Models\UserJob;
 use Carbon\Carbon;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
@@ -151,6 +152,18 @@ Route::middleware('auth')->group(function () {
             ->orderBy("created_at", "desc")
             ->paginate(30);
         return $jobs;
+    });
+
+    Route::post("/jobs/in-queue", function (Request $request){
+        $jobsCount = UserJob::query()
+            ->whereNull("completed_at")
+            ->where("status", 0)
+            ->count();
+
+        return response()->json([
+            "summary_jobs_in_queue"=>$jobsCount
+        ]);
+
     });
 
     Route::post("/add-work", function (\Illuminate\Http\Request $request) {

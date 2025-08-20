@@ -48,6 +48,7 @@ class RunGatherData extends Command
         $jobs = UserJob::query()
             ->whereNull("completed_at")
             ->where("status", 0)
+            ->take(5)
             ->get();
 
        // Log::info("TEST".print_r($jobs->toArray(), true));

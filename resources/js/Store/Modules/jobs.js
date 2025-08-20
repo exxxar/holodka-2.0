@@ -15,6 +15,20 @@ const getters = {
 
 const actions = {
 
+    async jobsInQueue(context) {
+        let link = `${BASE_JOBS_LINK}/in-queue`
+        let method = 'POST'
+
+        let _axios = util.makeAxiosFactory(link, method)
+
+        return _axios.then((response) => {
+            let dataObject = response.data
+            return Promise.resolve(dataObject);
+        }).catch(err => {
+            context.commit("setErrors", err.response.data.errors || [])
+            return Promise.reject(err);
+        })
+    },
     async removeJob(context, payload = {id:null}) {
         let link = `${BASE_JOBS_LINK}/remove/${payload.id}`
         let method = 'DELETE'

@@ -1,5 +1,5 @@
-import { mergeProps, useSSRContext, unref, withCtx, createVNode, openBlock, createBlock, toDisplayString, createCommentVNode, Fragment, renderList } from "vue";
-import { ssrRenderAttrs, ssrRenderAttr, ssrIncludeBooleanAttr, ssrLooseContain, ssrRenderClass, ssrRenderList, ssrInterpolate, ssrRenderComponent } from "vue/server-renderer";
+import { mergeProps, useSSRContext, unref, withCtx, createVNode, openBlock, createBlock, toDisplayString, createCommentVNode, Fragment, renderList, createTextVNode } from "vue";
+import { ssrRenderAttrs, ssrRenderAttr, ssrIncludeBooleanAttr, ssrLooseContain, ssrRenderClass, ssrRenderList, ssrInterpolate, ssrRenderComponent, ssrRenderStyle } from "vue/server-renderer";
 import { _ as _sfc_main$3 } from "./AuthenticatedLayout-B1xft-Vz.js";
 import { Head } from "@inertiajs/vue3";
 import { _ as _export_sfc } from "./_plugin-vue_export-helper-1tPrXgE0.js";
@@ -196,12 +196,14 @@ const __default__ = {
     return {
       link: null,
       company: null,
+      queue_count: null,
       messages: []
     };
   },
   mounted() {
     this.requestToken();
     this.company = this.user.company || null;
+    this.jobsInQueue();
     let channel = pusher.subscribe("my-channel");
     channel.bind("my-event", (data) => {
       if (data.userId === this.user.id) {
@@ -228,6 +230,11 @@ const __default__ = {
   methods: {
     fillVK() {
       this.$store.dispatch("fillVK").then((resp) => {
+      });
+    },
+    jobsInQueue() {
+      this.$store.dispatch("jobsInQueue").then((resp) => {
+        this.queue_count = resp.summary_jobs_in_queue || 0;
       });
     },
     storeCompany() {
@@ -292,7 +299,13 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
             });
             _push2(`<!--]--></div></div></div><div class="col-8"${_scopeId}>`);
             _push2(ssrRenderComponent(RequestVKForm, null, null, _parent2, _scopeId));
-            _push2(`</div></div><div class="row p-3"${_scopeId}><div class="col-12"${_scopeId}><h6 class="my-2 fw-bold"${_scopeId}>Задачи в очереди</h6>`);
+            _push2(`</div></div><div class="row p-3"${_scopeId}><div class="col-12"${_scopeId}><h6 class="my-2 fw-bold d-flex justify-between"${_scopeId}>Задачи в очереди `);
+            if (!_ctx.queue_count) {
+              _push2(`<span class="spinner-border spinner-border-sm" role="status"${_scopeId}><span class="visually-hidden"${_scopeId}>Loading...</span></span>`);
+            } else {
+              _push2(`<span style="${ssrRenderStyle({ "font-size": "10px" })}" class="text-gray-400"${_scopeId}>${ssrInterpolate(_ctx.queue_count)} задача в глобальной очереди (${ssrInterpolate(_ctx.queue_count / 5 * 10 + 10)} мин) </span>`);
+            }
+            _push2(`</h6>`);
             _push2(ssrRenderComponent(_sfc_main$1, null, null, _parent2, _scopeId));
             _push2(`</div></div></div></div></div>`);
           } else {
@@ -336,7 +349,20 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
                     ]),
                     createVNode("div", { class: "row p-3" }, [
                       createVNode("div", { class: "col-12" }, [
-                        createVNode("h6", { class: "my-2 fw-bold" }, "Задачи в очереди"),
+                        createVNode("h6", { class: "my-2 fw-bold d-flex justify-between" }, [
+                          createTextVNode("Задачи в очереди "),
+                          !_ctx.queue_count ? (openBlock(), createBlock("span", {
+                            key: 0,
+                            class: "spinner-border spinner-border-sm",
+                            role: "status"
+                          }, [
+                            createVNode("span", { class: "visually-hidden" }, "Loading...")
+                          ])) : (openBlock(), createBlock("span", {
+                            key: 1,
+                            style: { "font-size": "10px" },
+                            class: "text-gray-400"
+                          }, toDisplayString(_ctx.queue_count) + " задача в глобальной очереди (" + toDisplayString(_ctx.queue_count / 5 * 10 + 10) + " мин) ", 1))
+                        ]),
                         createVNode(_sfc_main$1)
                       ])
                     ])
