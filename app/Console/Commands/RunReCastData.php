@@ -48,7 +48,14 @@ class RunReCastData extends Command
             $job->save();
         }
 
-        ParseVKJob::dispatch();
+        $jobsCount = UserJob::query()
+            ->whereNull("completed_at")
+            ->whereNotNull("token")
+            ->where("status", 0)
+            ->count();
+
+        if ($jobsCount > 0)
+            ParseVKJob::dispatch();
 
 
     }
