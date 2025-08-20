@@ -5,6 +5,8 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
@@ -51,7 +53,8 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function getIsActiveTokenAttribute(){
+    public function getIsActiveTokenAttribute()
+    {
 
         $timeFromVariable = $this->vk_token_expired_at ?? null;
 
@@ -65,8 +68,19 @@ class User extends Authenticatable
         return $currentTime->lessThan($variableTime);
     }
 
-    public static function getSelf(){
+    public static function getSelf()
+    {
         $user = User::query()->find(Auth::user()->id ?? null);
         return $user;
+    }
+
+    public function persons(): HasMany
+    {
+        return $this->hasMany(Person::class,'owner_id','id');
+    }
+
+    public function jobs(): HasMany
+    {
+        return $this->hasMany(UserJob::class);
     }
 }
