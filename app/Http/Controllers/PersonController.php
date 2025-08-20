@@ -30,6 +30,9 @@ class PersonController extends Controller
     public function getStatistic(Request $request)
     {
 
+        $sortField = $request->input('sort_field', 'name'); // поле по умолчанию
+        $sortDirection = $request->input('sort_direction', 'asc'); // направление по умолчанию
+
         $users = User::query()
             ->withCount([
                 // Persons
@@ -48,6 +51,11 @@ class PersonController extends Controller
                 'jobs as jobs_error' => fn($q) => $q->where('status', 3),
             ])
             ->get();
+
+        $users = $users->sortBy(function ($user) use ($sortField) {
+            return $user->{$sortField} ?? 0; // если поле не найдено, считаем 0
+        }, SORT_REGULAR, $sortDirection === 'desc');
+
 
         $persons = [];
         $jobs = [];
