@@ -32,6 +32,18 @@ class RunGatherData extends Command
     public function handle()
     {
         ini_set('max_execution_time', '3000');
+
+        $jobs = UserJob::query()
+            ->whereNull("completed_at")
+            ->where("status", 1)
+            ->get();
+
+        foreach ($jobs as $job)
+        {
+            $job->status = UserJobStatusEnum::Error->value;
+            $job->save();
+        }
+
         $jobs = UserJob::query()
             ->whereNull("completed_at")
             ->where("status", 0)

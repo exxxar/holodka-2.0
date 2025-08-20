@@ -39,7 +39,7 @@
     "/build/assets/Pagination-DfZxRDzj.css"
   ],
   "resources/js/Components/Persons/JobsTable.vue": [
-    "/build/assets/Dashboard-8DTH7jff.js"
+    "/build/assets/Dashboard-Cp67jd6q.js"
   ],
   "resources/js/Components/Persons/PersonForm.vue": [
     "/build/assets/PersonForm-DZ9cgiZX.js",
@@ -54,7 +54,7 @@
     "/build/assets/PersonForm-Co3JUmZX.css"
   ],
   "resources/js/Components/Persons/RequestVKForm.vue": [
-    "/build/assets/Dashboard-8DTH7jff.js"
+    "/build/assets/Dashboard-Cp67jd6q.js"
   ],
   "resources/js/Components/PrimaryButton.vue": [
     "/build/assets/PrimaryButton-CZbnR4E4.js"
@@ -93,7 +93,7 @@
     "/build/assets/VerifyEmail-B-wp82iG.js"
   ],
   "resources/js/Pages/Dashboard.vue": [
-    "/build/assets/Dashboard-8DTH7jff.js"
+    "/build/assets/Dashboard-Cp67jd6q.js"
   ],
   "resources/js/Pages/Persons.vue": [
     "/build/assets/Persons-C3krt4Fj.js"

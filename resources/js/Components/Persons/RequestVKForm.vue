@@ -46,6 +46,11 @@
             </div>
 
         </div>
+
+        <p class="alert alert-info rounded-0 my-3" v-if="!form.is_only_active">
+            В группе будет обработано не более 30 тыс. пользователей
+        </p>
+
         <div class="d-flex w-100 justify-center">
 
 

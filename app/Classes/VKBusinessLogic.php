@@ -326,7 +326,7 @@ class VKBusinessLogic
             ->find($jobId);
 
         $step = 200;
-        $maxUserLimit = 200000;
+        $maxUserLimit = 30000;
         $offset = 0;
         $userIds = [];
         do {
@@ -335,7 +335,7 @@ class VKBusinessLogic
             $count = $result["count"];
 
             if ($offset == 0 && !is_null($j)) {
-                $j->time_execute = round((($count / 100) / 60) * 3) + 1;
+                $j->time_execute = round(((min($count, $maxUserLimit) / 100) / 60) * 3) + 1;
                 $j->save();
             }
 

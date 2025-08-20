@@ -63,7 +63,13 @@ function _sfc_ssrRender(_ctx, _push, _parent, _attrs, $props, $setup, $data, $op
   } else {
     _push(`<!---->`);
   }
-  _push(`<div class="d-flex w-100 justify-center"><div class="form-check form-switch"><input${ssrIncludeBooleanAttr(Array.isArray($data.form.is_only_active) ? ssrLooseContain($data.form.is_only_active, null) : $data.form.is_only_active) ? " checked" : ""} class="form-check-input" type="checkbox" role="switch" id="is-only-active-users"><label class="form-check-label" for="is-only-active-users"> Собирать только активных пользователей: <span class="${ssrRenderClass({ "fw-bold text-primary": $data.form.is_only_active })}">вкл</span> / <span class="${ssrRenderClass({ "fw-bold text-primary": !$data.form.is_only_active })}">выкл</span></label></div></div><div class="d-flex w-100 justify-center"><button${ssrIncludeBooleanAttr(!$options.user.is_active_token) ? " disabled" : ""} class="btn btn-primary rounded-0">Добавить задачу </button></div></form>`);
+  _push(`<div class="d-flex w-100 justify-center"><div class="form-check form-switch"><input${ssrIncludeBooleanAttr(Array.isArray($data.form.is_only_active) ? ssrLooseContain($data.form.is_only_active, null) : $data.form.is_only_active) ? " checked" : ""} class="form-check-input" type="checkbox" role="switch" id="is-only-active-users"><label class="form-check-label" for="is-only-active-users"> Собирать только активных пользователей: <span class="${ssrRenderClass({ "fw-bold text-primary": $data.form.is_only_active })}">вкл</span> / <span class="${ssrRenderClass({ "fw-bold text-primary": !$data.form.is_only_active })}">выкл</span></label></div></div>`);
+  if (!$data.form.is_only_active) {
+    _push(`<p class="alert alert-info rounded-0 my-3"> В группе будет обработано не более 30 тыс. пользователей </p>`);
+  } else {
+    _push(`<!---->`);
+  }
+  _push(`<div class="d-flex w-100 justify-center"><button${ssrIncludeBooleanAttr(!$options.user.is_active_token) ? " disabled" : ""} class="btn btn-primary rounded-0">Добавить задачу </button></div></form>`);
 }
 const _sfc_setup$2 = _sfc_main$2.setup;
 _sfc_main$2.setup = (props, ctx) => {
