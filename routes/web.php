@@ -146,11 +146,12 @@ Route::middleware('auth')->group(function () {
         return response()->noContent();
     });
 
-    Route::post("/jobs", function () {
+    Route::post("/jobs", function (Request $request) {
+        $size = $request->size ?? 50;
         $jobs = \App\Models\UserJob::query()
             ->where("user_id", Auth::user()->id)
             ->orderBy("created_at", "desc")
-            ->paginate(30);
+            ->paginate($size);
         return $jobs;
     });
 

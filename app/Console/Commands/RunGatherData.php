@@ -51,7 +51,7 @@ class RunGatherData extends Command
             ->whereNull("completed_at")
             ->whereNotNull("token")
             ->where("status", 0)
-            ->take(10)
+            ->take(30)
             ->skip(0)
             ->get();
 

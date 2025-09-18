@@ -31,30 +31,30 @@
     "/build/assets/AuthenticatedLayout-B1xft-Vz.js"
   ],
   "resources/js/Components/Pagination.vue": [
-    "/build/assets/Pagination-2FDkcWjj.js",
+    "/build/assets/Pagination-DOYFc-0c.js",
     "/build/assets/Pagination-DfZxRDzj.css"
   ],
   "resources/js/Components/Pagination.vue?vue&type=style&index=0&lang.scss": [
-    "/build/assets/Pagination-2FDkcWjj.js",
+    "/build/assets/Pagination-DOYFc-0c.js",
     "/build/assets/Pagination-DfZxRDzj.css"
   ],
   "resources/js/Components/Persons/JobsTable.vue": [
-    "/build/assets/Dashboard-BBDJVG-7.js"
+    "/build/assets/Dashboard-DS5MPuwG.js"
   ],
   "resources/js/Components/Persons/PersonForm.vue": [
-    "/build/assets/PersonForm-DZ9cgiZX.js",
+    "/build/assets/PersonForm-B5STGieO.js",
     "/build/assets/PersonForm-Co3JUmZX.css"
   ],
   "resources/js/Components/Persons/PersonTable.vue": [
-    "/build/assets/PersonForm-DZ9cgiZX.js",
+    "/build/assets/PersonForm-B5STGieO.js",
     "/build/assets/PersonForm-Co3JUmZX.css"
   ],
   "resources/js/Components/Persons/PersonTable.vue?vue&type=style&index=0&lang.css": [
-    "/build/assets/PersonForm-DZ9cgiZX.js",
+    "/build/assets/PersonForm-B5STGieO.js",
     "/build/assets/PersonForm-Co3JUmZX.css"
   ],
   "resources/js/Components/Persons/RequestVKForm.vue": [
-    "/build/assets/Dashboard-BBDJVG-7.js"
+    "/build/assets/Dashboard-DS5MPuwG.js"
   ],
   "resources/js/Components/PrimaryButton.vue": [
     "/build/assets/PrimaryButton-CZbnR4E4.js"
@@ -93,10 +93,10 @@
     "/build/assets/VerifyEmail-B-wp82iG.js"
   ],
   "resources/js/Pages/Dashboard.vue": [
-    "/build/assets/Dashboard-BBDJVG-7.js"
+    "/build/assets/Dashboard-DS5MPuwG.js"
   ],
   "resources/js/Pages/Persons.vue": [
-    "/build/assets/Persons-C3krt4Fj.js"
+    "/build/assets/Persons-BPOXdaLz.js"
   ],
   "resources/js/Pages/Profile/Edit.vue": [
     "/build/assets/Edit-Px2BVH3E.js"
@@ -111,7 +111,7 @@
     "/build/assets/UpdateProfileInformationForm-BwLAAesb.js"
   ],
   "resources/js/Pages/Statistic.vue": [
-    "/build/assets/Statistic-TS49c1XA.js"
+    "/build/assets/Statistic-DTJ1YknY.js"
   ],
   "resources/js/Pages/Welcome.vue": [
     "/build/assets/Welcome-Bgyz5c6y.js",

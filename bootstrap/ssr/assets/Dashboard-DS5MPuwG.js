@@ -3,7 +3,7 @@ import { ssrRenderAttrs, ssrRenderAttr, ssrIncludeBooleanAttr, ssrLooseContain, 
 import { _ as _sfc_main$3 } from "./AuthenticatedLayout-B1xft-Vz.js";
 import { Head } from "@inertiajs/vue3";
 import { _ as _export_sfc } from "./_plugin-vue_export-helper-1tPrXgE0.js";
-import { P as Pagination } from "./Pagination-2FDkcWjj.js";
+import { P as Pagination } from "./Pagination-DOYFc-0c.js";
 import { mapGetters } from "vuex";
 import "./ApplicationLogo-B9dF0F9q.js";
 const _sfc_main$2 = {

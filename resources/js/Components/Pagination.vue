@@ -73,8 +73,9 @@ export default {
 
     methods:{
         nextPage(){
-            this.currentPage = this.pagination.meta.current_page+1
-            this.$emit('pagination_page', this.pagination.meta.current_page+1)
+            let page = (this.pagination.meta?.current_page||0)
+            this.currentPage = page+1
+            this.$emit('pagination_page', page+1)
         },
         page(index){
             this.currentPage = index

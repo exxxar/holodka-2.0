@@ -1,5 +1,5 @@
 import { ssrRenderList, ssrRenderClass, ssrInterpolate, ssrRenderAttr, ssrRenderStyle, ssrRenderComponent } from "vue/server-renderer";
-import { P as Pagination } from "./Pagination-2FDkcWjj.js";
+import { P as Pagination } from "./Pagination-DOYFc-0c.js";
 import { mapGetters } from "vuex";
 import { useSSRContext } from "vue";
 const __default__ = {
